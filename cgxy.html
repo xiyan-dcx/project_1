@@ -1,0 +1,4895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>慧镜面试 - 多模态智能模拟面试评测系统</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d5cb6;
+            --secondary: #f8f9fa;
+            --accent: #ff6b6b;
+            --text: #202124;
+            --text-light: #5f6368;
+            --border: #dadce0;
+            --success: #34a853;
+            --warning: #f9ab00;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --analytics-primary: #6a11cb;
+            --analytics-secondary: #2575fc;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), #4a6cf7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-register {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 14px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-register:hover {
+            background: #e55a5a;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), #4a6cf7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .interview-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .video-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            text-align: center;
+            color: var(--text-light);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        #video {
+            display: none;
+        }
+
+        .video-placeholder i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .video-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .video-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.4);
+        }
+
+        .video-btn.stop {
+            background: var(--accent);
+        }
+
+        .download-btn {
+            color: var(--primary) !important;
+        }
+
+        .download-btn:hover {
+            color: white !important;
+            background: var(--primary) !important;
+        }
+
+        .result-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            max-width: 900px;
+            margin: 0 auto;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .feedback-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .feedback-section h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-section h3 i {
+            color: var(--primary);
+        }
+
+        .suggestion-list {
+            list-style-type: none;
+        }
+
+        .suggestion-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .suggestion-list li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-list li i {
+            color: var(--success);
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 16px;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+        }
+
+        .position-selection {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin: 0 auto 60px;
+            max-width: 1000px;
+            text-align: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .position-selection h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .position-selection p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .positions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .position-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 2px solid #eaeaea;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .position-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .position-card.selected {
+            border-color: var(--primary);
+            background: rgba(26, 115, 232, 0.03);
+        }
+
+        .position-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .position-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .position-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .position-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .selection-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .position-description {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .position-description h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .position-description ul {
+            padding-left: 20px;
+        }
+
+        .position-description li {
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .active-section {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 160px;
+            padding: 10px 0;
+            z-index: 100;
+            display: none;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .position-selection {
+                padding: 25px;
+            }
+
+            .positions-container {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            animation: modalopen 0.3s;
+        }
+
+        @keyframes modalopen {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #555;
+        }
+
+        .auth-form {
+            display: block;
+        }
+
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+
+        .auth-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .auth-form .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .auth-form .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .auth-form button {
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .auth-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-light);
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 学习资源页面样式 */
+        .resource-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 60px;
+        }
+
+        .resource-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .resource-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .resource-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .recommendation-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-title i {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .resource-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        .resource-image {
+            height: 160px;
+            overflow: hidden;
+            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .resource-content {
+            padding: 20px;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .resource-title .bookmark {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .resource-title .bookmark:hover,
+        .resource-title .bookmark.active {
+            color: var(--accent);
+        }
+
+        .resource-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .resource-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .resource-categories {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .category-card {
+            min-width: 220px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover,
+        .category-card.active {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .category-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .category-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 16px;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+        }
+
+        /* 收藏页面样式 */
+        .collection-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 60px;
+        }
+
+        .collection-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .collection-header h1 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .no-collections {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .no-collections i {
+            font-size: 60px;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        /* 个性化分析页面样式 */
+        .personalized-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 60px;
+        }
+
+        .personalized-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, var(--analytics-primary), var(--analytics-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .personalized-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .personalized-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .analysis-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .analysis-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .analysis-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .analysis-card h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--analytics-primary);
+        }
+
+        .strengths-list,
+        .improvements-list {
+            list-style-type: none;
+        }
+
+        .strengths-list li,
+        .improvements-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .strengths-list li:last-child,
+        .improvements-list li:last-child {
+            border-bottom: none;
+        }
+
+        .strengths-list li i {
+            color: var(--success);
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        .improvements-list li i {
+            color: var(--warning);
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        .recommended-jobs {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .job-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+
+        .job-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(106, 17, 203, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--analytics-primary);
+            font-size: 24px;
+        }
+
+        .job-content {
+            flex: 1;
+        }
+
+        .job-content h3 {
+            margin-bottom: 8px;
+        }
+
+        .job-content p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .job-match {
+            background: rgba(106, 17, 203, 0.1);
+            color: var(--analytics-primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .match-reason {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .match-reason h4 {
+            margin-bottom: 10px;
+            color: var(--analytics-primary);
+        }
+
+        .pdf-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .pdf-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            margin-bottom: 20px;
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .pdf-preview i {
+            font-size: 48px;
+            color: var(--analytics-primary);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-header h1 {
+                font-size: 2rem;
+            }
+
+            .resource-categories {
+                flex-wrap: nowrap;
+            }
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .volume-indicator {
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .volume-level {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.1s;
+        }
+
+        .recording-time {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .retry-btn:hover {
+            background: var(--primary) !important;
+        }
+        /* 新增简历提交部分样式 */
+        .resume-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            max-width: 900px;
+            margin: 0 auto 60px;
+            text-align: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .resume-header {
+            margin-bottom: 30px;
+        }
+
+        .resume-header h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), #4a6cf7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .resume-header p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .resume-form {
+            text-align: left;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1 1 300px;
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .resume-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .resume-preview {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            min-height: 250px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .resume-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .resume-preview-content h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .resume-preview-content p {
+            margin-bottom: 15px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .resume-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .resume-upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .resume-upload-area:hover {
+            background: rgba(26, 115, 232, 0.05);
+        }
+
+        .resume-upload-area i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .resume-upload-area p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .resume-upload-area small {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .upload-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .resume-tips {
+            background: rgba(26, 115, 232, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+
+        .resume-tips h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .resume-tips ul {
+            padding-left: 20px;
+        }
+
+        .resume-tips li {
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .resume-section {
+                padding: 25px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .resume-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* 导航栏中的简历链接样式 */
+        .nav-resume.hidden {
+            display: none;
+        }
+
+        /* 表单验证错误样式 */
+        .error {
+            color: var(--accent);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.invalid .form-control {
+            border-color: var(--accent);
+        }
+
+        .form-group.invalid .error {
+            display: block;
+        }
+        /* 新增综合报告布局样式 */
+        .comprehensive-report {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .report-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .report-column {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .report-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 视频播放器模态框 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            padding-top: 60px;
+            animation: fadeIn 0.3s;
+        }
+
+        .video-modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            animation: slideDown 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .video-modal-close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .video-modal-close:hover {
+            color: #555;
+        }
+
+        .video-player {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .video-player::before {
+            content: "";
+            display: block;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 15px 0;
+            max-width: 100%; /* 防止溢出 */
+        }
+
+        .video-info h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .video-info p {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .video-modal-content {
+                width: 95%;
+                padding: 15px;
+                margin: 10% auto;
+            }
+
+            .video-player::before {
+                padding-top: 75%; /* 4:3 aspect ratio for mobile */
+            }
+
+            .video-info h3 {
+                font-size: 1.2rem;
+            }
+
+            .video-info p {
+                font-size: 0.9rem;
+            }
+
+            .video-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .video-player-container {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="logo-text">慧镜面试</div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a class="active" data-section="hero" href="#">首页</a></li>
+                <!-- 新增提交个人简历导航（登录后显示） -->
+                <li class="nav-resume hidden" id="nav-resume-item"><a class="nav-resume-link" data-section="resume-section"
+                                                                      href="#">提交个人简历</a>
+                </li>
+                <li><a class="nav-position" data-section="position-section" href="#">岗位选择</a></li>
+                <li><a class="nav-interview" data-section="interview-section" href="#">模拟面试</a></li>
+                <li><a class="nav-comprehensive-report" data-section="comprehensive-report-section" href="#">综合评测报告</a></li>
+                <li><a class="nav-resource" data-section="resource-section" href="#">学习资源</a></li>
+            </ul>
+        </nav>
+
+        <div class="auth-buttons" id="auth-buttons">
+            <button class="btn btn-outline" id="login-btn">登录</button>
+            <button class="btn btn-register" id="register-btn">注册</button>
+        </div>
+
+        <div class="user-info hidden" id="user-info">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-dropdown" id="user-dropdown">
+                <div class="dropdown-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>退出登录</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 登录和注册模态框 -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <span class="close" id="close-auth-modal">&times;</span>
+            <div class="auth-form" id="login-form">
+                <h2>登录账号</h2>
+                <form id="login-form-submit">
+                    <div class="form-group">
+                        <label for="login-username">用户名</label>
+                        <input class="form-control" id="login-username" placeholder="请输入用户名" required type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">密码</label>
+                        <input class="form-control" id="login-password" placeholder="请输入密码" required
+                               type="password">
+                    </div>
+                    <button class="btn btn-primary" type="submit">登录</button>
+                </form>
+                <div class="auth-switch">
+                    还没有账号？<a id="switch-to-register">立即注册</a>
+                </div>
+            </div>
+            <div class="auth-form hidden" id="register-form">
+                <h2>创建账号</h2>
+                <form id="register-form-submit">
+                    <div class="form-group">
+                        <label for="register-username">用户名</label>
+                        <input class="form-control" id="register-username" placeholder="设置用户名" required
+                               type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">电子邮箱</label>
+                        <input class="form-control" id="register-email" placeholder="请输入邮箱" required type="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">设置密码</label>
+                        <input class="form-control" id="register-password" placeholder="至少6位字符" required
+                               type="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">确认密码</label>
+                        <input class="form-control" id="register-confirm-password" placeholder="再次输入密码"
+                               required type="password">
+                    </div>
+                    <button class="btn btn-register" type="submit">注册</button>
+                </form>
+                <div class="auth-switch">
+                    已有账号？<a id="switch-to-login">立即登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页 -->
+    <section class="hero active-section" id="hero">
+        <h1>多模态智能模拟面试评测系统</h1>
+        <p>基于人工智能技术，通过语音、表情、内容多维度分析，提供专业面试评测与个性化提升建议，助力高校学生提升面试能力</p>
+        <button class="btn btn-primary start-btn" id="start-interview-btn"
+                style="padding: 15px 40px; font-size: 18px;">
+            开始模拟面试 <i class="fas fa-arrow-right"></i>
+        </button>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <h3>多模态分析</h3>
+            <p>结合语音、表情、肢体语言等多维度数据，全面评估面试表现，提供精准反馈。</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI智能评测</h3>
+            <p>基于讯飞星火大模型，深度分析面试内容，评估专业知识、表达能力等核心能力。</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>能力可视化</h3>
+            <p>通过雷达图、得分图表等直观展示能力分布，清晰定位优势与不足。</p>
+        </div>
+    </section>
+
+    <!-- 新增简历提交部分 -->
+    <section class="resume-section hidden" id="resume-section">
+        <div class="resume-header">
+            <h2>提交个人简历</h2>
+            <p>请填写或上传您的个人简历，这将帮助我们为您提供更精准的面试评测和职业分析</p>
+        </div>
+
+        <div class="resume-form">
+            <div class="form-row">
+                <div class="form-group" id="name-group">
+                    <label for="full-name">姓名</label>
+                    <input class="form-control" id="full-name" placeholder="请输入您的姓名" required type="text">
+                    <div class="error">请填写姓名</div>
+                </div>
+                <div class="form-group" id="email-group">
+                    <label for="email">电子邮箱</label>
+                    <input class="form-control" id="email" placeholder="请输入您的邮箱" required type="email">
+                    <div class="error">请填写有效的邮箱地址</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" id="phone-group">
+                    <label for="phone">联系电话</label>
+                    <input class="form-control" id="phone" placeholder="请输入您的手机号码" required type="tel">
+                    <div class="error">请填写有效的手机号码</div>
+                </div>
+                <div class="form-group" id="education-group">
+                    <label for="education">最高学历</label>
+                    <select class="form-control" id="education" required>
+                        <option value="">请选择学历</option>
+                        <option value="high-school">高中</option>
+                        <option value="college">大专</option>
+                        <option value="bachelor">本科</option>
+                        <option value="master">硕士</option>
+                        <option value="phd">博士</option>
+                    </select>
+                    <div class="error">请选择学历</div>
+                </div>
+            </div>
+
+            <div class="form-group" id="school-group">
+                <label for="school">毕业院校</label>
+                <input class="form-control" id="school" placeholder="请输入您的毕业院校" required type="text">
+                <div class="error">请填写毕业院校</div>
+            </div>
+
+            <div class="form-group" id="major-group">
+                <label for="major">专业</label>
+                <input class="form-control" id="major" placeholder="请输入您的专业" required type="text">
+                <div class="error">请填写专业</div>
+            </div>
+
+            <div class="form-group" id="experience-group">
+                <label for="experience">工作经验（年）</label>
+                <select class="form-control" id="experience" required>
+                    <option value="">请选择工作经验</option>
+                    <option value="0">应届毕业生</option>
+                    <option value="1">1年</option>
+                    <option value="2">2年</option>
+                    <option value="3-5">3-5年</option>
+                    <option value="5+">5年以上</option>
+                </select>
+                <div class="error">请选择工作经验</div>
+            </div>
+
+            <div class="form-group" id="skills-group">
+                <label for="skills">专业技能</label>
+                <textarea class="form-control" id="skills"
+                          placeholder="请列出您的专业技能，用逗号分隔（例如：Java, Python, SQL）" required></textarea>
+                <div class="error">请填写专业技能</div>
+            </div>
+
+            <div class="form-group" id="resume-content-group">
+                <label for="resume-content">个人简历</label>
+                <textarea class="form-control resume-textarea" id="resume-content"
+                          placeholder="请详细描述您的工作经历、项目经验和成就..." required></textarea>
+                <div class="error">请填写个人简历内容</div>
+            </div>
+
+            <div class="resume-tips">
+                <h4>简历撰写提示：</h4>
+                <ul>
+                    <li>使用具体的数据和成果来展示您的工作成就</li>
+                    <li>突出与目标职位相关的技能和经验</li>
+                    <li>保持格式简洁清晰，避免错别字</li>
+                    <li>包含项目经验时，说明您的角色和贡献</li>
+                </ul>
+            </div>
+
+            <div class="resume-upload-area" id="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>点击或拖拽上传简历文件 (PDF/DOC/DOCX)</p>
+                <small>最大文件大小: 5MB</small>
+                <div class="file-name" id="file-name">未选择文件</div>
+                <div class="upload-btn" id="upload-btn">选择文件</div>
+                <input accept=".pdf,.doc,.docx" id="file-input" style="display: none;" type="file">
+            </div>
+        </div>
+
+        <div class="resume-preview">
+            <div class="resume-preview-header">
+                <h3>简历预览</h3>
+                <span id="last-updated">尚未提交</span>
+            </div>
+            <div class="resume-preview-content" id="resume-preview">
+                <p>填写表单后，您提交的简历内容将显示在这里。</p>
+            </div>
+        </div>
+
+        <div class="resume-actions">
+            <button class="btn btn-outline" id="back-to-home-from-resume">返回首页</button>
+            <button class="btn btn-primary" id="submit-resume">提交简历并继续</button>
+        </div>
+    </section>
+
+    <!-- 岗位选择部分 -->
+    <section class="position-selection hidden" id="position-section">
+        <h2>选择目标岗位</h2>
+        <p>根据您的专业和兴趣，选择最适合的岗位开始模拟面试</p>
+
+        <div class="positions-container">
+            <div class="position-card" data-position="ai-engineer">
+                <div class="position-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>人工智能工程师</h3>
+                <p>负责机器学习模型的开发、训练和部署，解决复杂的AI问题。</p>
+                <div class="position-tags">
+                    <div class="tag">机器学习</div>
+                    <div class="tag">深度学习</div>
+                    <div class="tag">Python</div>
+                </div>
+            </div>
+
+            <div class="position-card" data-position="data-engineer">
+                <div class="position-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>大数据开发工程师</h3>
+                <p>设计、构建和维护大数据处理系统，进行数据分析和挖掘。</p>
+                <div class="position-tags">
+                    <div class="tag">Hadoop</div>
+                    <div class="tag">Spark</div>
+                    <div class="tag">SQL</div>
+                </div>
+            </div>
+
+            <div class="position-card" data-position="iot-engineer">
+                <div class="position-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3>物联网工程师</h3>
+                <p>开发物联网设备和系统，实现智能硬件与软件的集成。</p>
+                <div class="position-tags">
+                    <div class="tag">嵌入式</div>
+                    <div class="tag">传感器</div>
+                    <div class="tag">通信协议</div>
+                </div>
+            </div>
+
+            <div class="position-card" data-position="product-manager">
+                <div class="position-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>产品经理</h3>
+                <p>负责产品规划、需求分析和团队协调，推动产品从概念到上线。</p>
+                <div class="position-tags">
+                    <div class="tag">需求分析</div>
+                    <div class="tag">用户体验</div>
+                    <div class="tag">市场调研</div>
+                </div>
+            </div>
+            <div class="position-card" data-position="frontend-engineer">
+                <div class="position-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>前端开发工程师</h3>
+                <p>负责网站和Web应用的用户界面开发，实现交互设计和用户体验优化。</p>
+                <div class="position-tags">
+                    <div class="tag">HTML/CSS</div>
+                    <div class="tag">JavaScript</div>
+                    <div class="tag">React/Vue</div>
+                </div>
+            </div>
+
+            <div class="position-card" data-position="backend-engineer">
+                <div class="position-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>后端开发工程师</h3>
+                <p>负责服务器端逻辑开发，数据库设计和API接口实现。</p>
+                <div class="position-tags">
+                    <div class="tag">Java/Python</div>
+                    <div class="tag">数据库</div>
+                    <div class="tag">API设计</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="selection-controls">
+            <button class="btn btn-outline" id="back-to-home">返回首页</button>
+            <button class="btn btn-primary" disabled id="start-interview">开始面试</button>
+        </div>
+    </section>
+
+    <!-- 模拟面试部分 -->
+    <section class="main-content hidden" id="interview-section">
+        <div class="interview-panel">
+            <div class="panel-header">
+                <h2>模拟面试</h2>
+                <div class="tag" id="position-tag"
+                     style="background: #e8f0fe; color: var(--primary); padding: 5px 15px; border-radius: 20px; font-weight: 500;">
+                    人工智能工程师
+                </div>
+            </div>
+
+            <div class="question-container"
+                 style="background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 25px;">
+                <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <i class="fas fa-question-circle" style="color: var(--primary);"></i>
+                    面试问题
+                </h3>
+                <p id="interview-question" style="font-size: 18px; line-height: 1.6;">
+                    请描述一个你参与过的机器学习项目，包括你负责的部分、使用的技术、遇到的挑战以及如何解决的。
+                </p>
+                <div style="display: flex; justify-content: flex-end; margin-top: 15px; color: var(--text-light);">
+                    <i class="fas fa-clock"></i> <span id="timer">剩余时间: 02:15</span>
+                </div>
+            </div>
+
+            <div class="video-container">
+                <video autoplay id="video" muted playsinline
+                       style="position:absolute;width:200px;height:150px;bottom:20px;right:20px;border-radius:10px;border:2px solid var(--primary);z-index: 10;"></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <div class="video-placeholder" id="video-placeholder">
+                    <div style="display:flex; align-items: center; justify-content: center;height: 100%;">
+                        <div style="text-align: center;">
+                            <i class="fas fa-user"
+                               style="font-size: 60px; color: var(--primary); margin-bottom: 15px;"></i>
+                            <p>准备开始录制</p>
+                            <p id="device-status" style="font-size: 14px; margin-top: 10px;">摄像头和麦克风已关闭</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-controls">
+                <button class="video-btn" id="toggle-mic">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="video-btn" id="toggle-camera">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="video-btn stop" id="record-btn">
+                    <i class="fas fa-record-vinyl"></i>
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" id="submit-answer" style="padding: 15px 40px; font-size: 18px;">
+                    提交答案 <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 添加新的综合报告部分 -->
+    <section class="comprehensive-report hidden" id="comprehensive-report-section">
+        <div class="result-header">
+            <h2>综合评测报告</h2>
+            <p>基于多维度分析的综合评估与职业发展建议</p>
+        </div>
+
+        <div class="score-display">
+            86<span style="font-size: 2rem; color: var(--text-light);">/100</span>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-box">
+                <div class="chart-title">能力维度雷达图</div>
+                <canvas id="radarChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">能力得分分布</div>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <div class="report-columns">
+            <!-- 左侧：面试评测结果 -->
+            <div class="report-column">
+                <div class="feedback-section">
+                    <h3><i class="fas fa-thumbs-up"></i> 优势分析</h3>
+                    <ul class="suggestion-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>专业知识扎实</strong> - 对机器学习概念和技术有深入理解，能够准确描述算法原理
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>项目经验丰富</strong> - 项目描述完整，展示了实际应用能力
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>逻辑思维清晰</strong> - 问题分析条理清晰，解决方案合理
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="feedback-section">
+                    <h3><i class="fas fa-lightbulb"></i> 改进建议</h3>
+                    <ul class="suggestion-list">
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>结构化表达</strong> - 建议使用STAR法则（情境、任务、行动、结果）来组织回答
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>眼神交流</strong> - 面试中与摄像头保持眼神接触，增强互动感
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>控制语速</strong> - 回答时适当放慢语速，确保表达清晰
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>时间管理</strong> - 回答时间控制在2-3分钟，避免过长的描述
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 右侧：个性化分析 -->
+            <div class="report-column">
+                <div class="analysis-card">
+                    <h2><i class="fas fa-star"></i> 核心优势</h2>
+                    <ul class="strengths-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>技术能力突出</strong> - 在算法和编程方面表现出色，具备扎实的技术基础
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>问题解决能力强</strong> - 能够快速分析问题并提出有效解决方案
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>学习能力优秀</strong> - 对新技术的接受和学习能力强
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>项目经验丰富</strong> - 拥有多个相关领域的实践经验
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card">
+                    <h2><i class="fas fa-lightbulb"></i> 提升建议</h2>
+                    <ul class="improvements-list">
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>沟通表达能力</strong> - 需要提高在团队中清晰表达技术方案的能力
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>项目规划能力</strong> - 在复杂项目中需要加强整体规划和进度控制能力
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>商业意识</strong> - 加强技术解决方案与业务价值的关联性思考
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-circle-right"></i>
+                            <div>
+                                <strong>团队协作</strong> - 提升跨部门协作和资源协调能力
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommended-jobs">
+            <h2><i class="fas fa-briefcase"></i> 推荐岗位</h2>
+            <p>根据您的技能和职业倾向，我们推荐以下岗位：</p>
+
+            <div class="job-card">
+                <div class="job-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="job-content">
+                    <h3>人工智能工程师</h3>
+                    <p>负责设计和开发AI算法模型，解决复杂问题</p>
+                    <div class="match-reason">
+                        <h4>推荐理由：</h4>
+                        <p>
+                            您的算法能力和技术基础与AI工程师岗位高度匹配，尤其在机器学习和深度学习方面表现出色。您的项目经验也证明您具备解决实际问题的能力。
+                        </p>
+                    </div>
+                </div>
+                <div class="job-match">匹配度 92%</div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="job-content">
+                    <h3>数据分析科学家</h3>
+                    <p>通过数据分析提供商业洞见，支持决策制定</p>
+                    <div class="match-reason">
+                        <h4>推荐理由：</h4>
+                        <p>
+                            您的问题解决能力和统计学基础非常适合数据分析岗位。通过加强商业意识培养，您能够将技术能力转化为商业价值。
+                        </p>
+                    </div>
+                </div>
+                <div class="job-match">匹配度 85%</div>
+            </div>
+        </div>
+
+        <div class="pdf-container">
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="back-to-resource">查看学习资源</button>
+            </div>
+        </div>
+    </section>
+    <!-- 新增视频模态框 -->
+    <div class="video-modal" id="video-modal">
+        <div class="video-modal-content">
+            <span class="video-modal-close" id="close-video-modal">&times;</span>
+            <div class="video-info">
+                <h3 id="video-modal-title">视频播放</h3>
+            </div>
+            <div class="video-player" id="video-player">
+                <!-- 视频播放器将在这里加载 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 学习资源部分 -->
+    <section class="resource-container hidden" id="resource-section">
+        <div class="resource-header">
+            <h1>学习提升资源</h1>
+            <p>根据您的评测报告和岗位需求，我们为您精心推荐了以下学习资源，助力您全面提升面试能力</p>
+        </div>
+
+        <!-- 基于评测改进建议的推荐 -->
+        <div class="recommendation-section">
+            <div class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                <h2>基于评测改进建议的推荐</h2>
+            </div>
+
+            <div class="filters">
+                <div class="filter-btn active" data-filter="all">全部</div>
+                <div class="filter-btn" data-filter="结构化表达">结构化表达</div>
+                <div class="filter-btn" data-filter="眼神交流">眼神交流</div>
+                <div class="filter-btn" data-filter="控制语速">控制语速</div>
+                <div class="filter-btn" data-filter="时间管理">时间管理</div>
+            </div>
+
+            <div class="resource-grid" id="recommended-resources">
+                <!-- 资源卡片将由JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <!-- 资源分类 -->
+        <div class="recommendation-section">
+            <div class="section-title">
+                <i class="fas fa-layer-group"></i>
+                <h2>按类别学习</h2>
+            </div>
+
+            <div class="resource-categories">
+                <div class="category-card active" data-category="专业知识">
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>专业知识</h3>
+                    <p>机器学习、算法等核心知识</p>
+                </div>
+
+                <div class="category-card" data-category="沟通表达">
+                    <div class="category-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>沟通表达</h3>
+                    <p>结构化表达、语言组织能力</p>
+                </div>
+
+                <div class="category-card" data-category="面试技巧">
+                    <div class="category-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>面试技巧</h3>
+                    <p>面试礼仪、问题应答策略</p>
+                </div>
+
+                <div class="category-card" data-category="思维能力">
+                    <div class="category-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>思维能力</h3>
+                    <p>逻辑思维、解决问题能力</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 全部资源 -->
+        <div class="recommendation-section">
+            <div class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>精选学习资源</h2>
+            </div>
+
+            <div class="search-section">
+                <h3>查找更多资源</h3>
+                <div class="search-container">
+                    <input class="search-input" id="search-input" placeholder="搜索资源、课程或关键词..." type="text">
+                    <button class="btn btn-primary" id="search-btn">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-btn active" data-type="all">全部</div>
+                    <div class="filter-btn" data-type="文章">文章</div>
+                    <div class="filter-btn" data-type="视频">视频</div>
+                    <div class="filter-btn" data-type="课程">课程</div>
+                    <div class="filter-btn" data-type="书籍">书籍</div>
+                </div>
+            </div>
+
+            <div class="resource-grid" id="all-resources">
+                <!-- 资源卡片将由JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-outline" id="back-to-report">返回评测报告</button>
+        </div>
+    </section>
+
+    <!-- 个性化分析页面 -->
+    <section class="personalized-section hidden" id="personalized-section">
+        <div class="personalized-header">
+            <h1>个性化职业分析</h1>
+            <p>基于您的面试表现和个人简历，为您提供专业的职业发展建议</p>
+        </div>
+
+        <div class="analysis-container">
+            <div class="analysis-card">
+                <h2><i class="fas fa-star"></i> 核心优势</h2>
+                <ul class="strengths-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>技术能力突出</strong> - 在算法和编程方面表现出色，具备扎实的技术基础
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>问题解决能力强</strong> - 能够快速分析问题并提出有效解决方案
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>学习能力优秀</strong> - 对新技术的接受和学习能力强
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>项目经验丰富</strong> - 拥有多个相关领域的实践经验
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 第十四届中国软件杯大赛 - 面向高校学生的多模态智能模拟面试评测智能体开发</p>
+        <p>技术支持：科大讯飞股份有限公司 | 使用讯飞星火大模型</p>
+    </footer>
+</div>
+
+<script>
+    const heroSection = document.getElementById('hero');
+    const positionSection = document.getElementById('position-section');
+    const interviewSection = document.getElementById('interview-section');
+    const resultSection = document.getElementById('result-section');
+    const resourceSection = document.getElementById('resource-section');
+    const collectionSection = document.getElementById('collection-section');
+    const personalizedSection = document.getElementById('personalized-section');
+    const resumeSection = document.getElementById('resume-section');
+    const comprehensiveReportSection = document.getElementById('comprehensive-report-section');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 获取开始面试按钮
+        const startInterviewBtn = document.getElementById('start-interview-btn');
+
+        // 添加点击事件监听
+        startInterviewBtn.addEventListener('click', function() {
+            // 检查用户是否登录
+            const isLoggedIn = checkUserLoginStatus();
+
+            if (!isLoggedIn) {
+                alert('请先登录系统！');
+                // 显示登录模态框
+                document.getElementById('auth-modal').style.display = 'block';
+                return;
+            }
+
+            // 不管是否提交过简历，都跳转到简历提交界面
+            showSection('resume-section');
+            // 设置导航栏中的"提交个人简历"为active
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelector('.nav-resume-link').classList.add('active');
+        });
+
+        // 初始化页面区域
+        const sections = [
+            heroSection, positionSection, interviewSection,
+            resultSection, resourceSection, collectionSection,
+            personalizedSection, resumeSection, comprehensiveReportSection
+        ];
+
+        // 确保所有区域初始状态正确
+        sections.forEach(section => {
+            if (section) {
+                section.classList.add('hidden');
+                section.classList.remove('active-section');
+            }
+        });
+
+        // 默认显示首页
+        heroSection.classList.remove('hidden');
+        heroSection.classList.add('active-section');
+    });
+
+    // 显示指定页面区域
+    function showSection(sectionId) {
+        // 隐藏所有区域
+        const sections = [
+            heroSection, positionSection, interviewSection,
+            resultSection, resourceSection, collectionSection,
+            personalizedSection, resumeSection, comprehensiveReportSection
+        ];
+
+        sections.forEach(section => {
+            if (section) {
+                section.classList.add('hidden');
+                section.classList.remove('active-section');
+            }
+        });
+
+        // 显示目标区域
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.remove('hidden');
+            targetSection.classList.add('active-section');
+        }
+
+          // 在报告部分显示时初始化图表
+        if (sectionId === 'comprehensive-report-section') {
+            setTimeout(initCharts, 100);
+        }
+    }
+
+    // 设置导航栏激活状态
+    function setNavActive(sectionId) {
+        // 移除所有导航项的active类
+        document.querySelectorAll('nav a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        // 为当前选中的导航项添加active类
+        const activeNavItem = document.querySelector(`nav a[data-section="${sectionId}"]`);
+        if (activeNavItem) {
+            activeNavItem.classList.add('active');
+        }
+    }
+
+    // 检查用户登录状态
+    function checkUserLoginStatus() {
+        // 实际应用中应检查登录状态
+        return localStorage.getItem('currentUser') !== null;
+    }
+
+    // 页面元素
+    const positionCards = document.querySelectorAll('.position-card');
+    const positionTag = document.getElementById('position-tag');
+    const interviewQuestion = document.getElementById('interview-question');
+    const startInterviewBtn = document.getElementById('start-interview');
+    const startBtn = document.getElementById('start-interview-btn');
+    const backToHomeBtn = document.getElementById('back-to-home');
+    const backToInterviewBtn = document.getElementById('back-to-interview');
+    const backToReportBtn = document.getElementById('back-to-report');
+    const toResourceBtn = document.getElementById('to-resource-btn');
+    const toPersonalizedBtn = document.getElementById('to-personalized-btn');
+    const navLinks = document.querySelectorAll('nav a');
+    const authButtons = document.getElementById('auth-buttons');
+    const userInfo = document.getElementById('user-info');
+    const userAvatar = document.getElementById('user-avatar');
+    const userDropdown = document.getElementById('user-dropdown');
+    const logoutBtn = document.getElementById('logout-btn');
+    const submitBtn = document.getElementById('submit-answer');
+    const backToResourceBtn = document.getElementById('back-to-resource'); // 新增
+
+    // 登录相关元素
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const authModal = document.getElementById('auth-modal');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const closeAuthModal = document.getElementById('close-auth-modal');
+    const switchToRegister = document.getElementById('switch-to-register');
+    const switchToLogin = document.getElementById('switch-to-login');
+    const loginFormSubmit = document.getElementById('login-form-submit');
+    const registerFormSubmit = document.getElementById('register-form-submit');
+
+    // 资源相关元素
+    const recommendedContainer = document.getElementById('recommended-resources');
+    const allContainer = document.getElementById('all-resources');
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+
+    // 简历相关变量
+    const submitResumeBtn = document.getElementById('submit-resume');
+    const backToHomeFromResumeBtn = document.getElementById('back-to-home-from-resume');
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const fileName = document.getElementById('file-name');
+    const resumePreview = document.getElementById('resume-preview');
+    const lastUpdated = document.getElementById('last-updated');
+    const navResumeItem = document.getElementById('nav-resume-item');
+    const navResumeLink = document.querySelector('.nav-resume-link');
+
+    // 简历表单元素
+    const fullNameInput = document.getElementById('full-name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const educationSelect = document.getElementById('education');
+    const schoolInput = document.getElementById('school');
+    const majorInput = document.getElementById('major');
+    const experienceSelect = document.getElementById('experience');
+    const skillsInput = document.getElementById('skills');
+    const resumeContentInput = document.getElementById('resume-content');
+
+    // 用户状态
+    let interviewTimer = null;
+    let isLoggedIn = false;
+    let currentUser = null;
+
+    // 资源数据
+    let resources = [];
+    let filteredResources = [];
+    let filteredAllResources = [];
+
+    // 图表变量
+    let radarChart = null;
+    let barChart = null;
+
+    let previousScores = []; // 用于存储之前的分数，避免重复
+    let previousStrengths = []; // 用于存储之前的优势分析
+    let previousImprovements = []; // 用于存储之前的改进建议
+
+    // 岗位数据
+    const positionData = {
+        'ai-engineer': {
+            name: '人工智能工程师',
+            description: '负责机器学习模型的开发、训练和部署，解决复杂的AI问题。',
+            questions: [
+                '请描述一个你参与过的机器学习项目，包括你负责的部分、使用的技术、遇到的挑战以及如何解决的。',
+                '解释一下过拟合和欠拟合的区别，以及如何防止过拟合？',
+                '请比较监督学习和无监督学习的区别，并各举一个应用实例。'
+            ]
+        },
+        'data-engineer': {
+            name: '大数据开发工程师',
+            description: '设计、构建和维护大数据处理系统，进行数据分析和挖掘。',
+            questions: [
+                '请描述你处理过的最大的数据集，以及你使用的技术和工具。',
+                '解释一下MapReduce的工作原理以及它在实际应用中的优势。',
+                '在数据仓库设计中，星型模型和雪花模型有什么区别？'
+            ]
+        },
+        'iot-engineer': {
+            name: '物联网工程师',
+            description: '开发物联网设备和系统，实现智能硬件与软件的集成。',
+            questions: [
+                '请描述一个你参与的物联网项目，包括系统架构、使用的硬件和通信协议。',
+                '在物联网系统中，如何确保数据的安全传输和存储？',
+                '解释MQTT协议的工作原理及其在物联网应用中的优势。'
+            ]
+        },
+        'product-manager': {
+            name: '产品经理',
+            description: '负责产品规划、需求分析和团队协调，推动产品从概念到上线。',
+            questions: [
+                '请描述你负责过的一个产品从0到1的过程，包括市场调研、需求分析和产品设计。',
+                '当开发团队和设计团队对产品方案有分歧时，你会如何处理？',
+                '如何确定一个新功能的优先级？请描述你的评估方法。'
+            ]
+        },
+        'frontend-engineer': {
+            name: '前端开发工程师',
+            description: '负责网站和Web应用的用户界面开发，实现交互设计和用户体验优化。',
+            questions: [
+                '请解释一下React和Vue的主要区别是什么？在实际项目中你会如何选择？',
+                '什么是跨域问题？列举几种常见的解决方案并说明它们的优缺点。',
+                '请描述一下你对前端性能优化的理解和实践经验。',
+                '如何实现一个响应式布局？请详细说明你的方法和考虑因素。',
+                '请解释一下前端工程化的概念，并说明你常用的工具链和工作流程。'
+            ]
+        },
+        'backend-engineer': {
+            name: '后端开发工程师',
+            description: '负责服务器端逻辑开发，数据库设计和API接口实现。',
+            questions: [
+                '请解释RESTful API的设计原则，并举例说明如何设计一个良好的API接口。',
+                '如何处理高并发场景下的系统性能问题？请分享你的经验和解决方案。',
+                '请比较关系型数据库和非关系型数据库的特点及适用场景。',
+                '什么是微服务架构？它与单体架构相比有哪些优缺点？',
+                '请描述一下你在项目中如何处理数据安全和用户认证的问题。'
+            ]
+        }
+    };
+
+    // 初始化页面状态
+    initPage();
+
+    // 初始化页面
+    function initPage() {
+        // 检查是否有登录状态
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            loginSuccess(JSON.parse(savedUser));
+        }
+
+        // 添加头像点击事件
+        if (userAvatar) {
+            userAvatar.addEventListener('click', function (e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+        }
+
+        // 点击页面其他地方关闭下拉菜单
+        document.addEventListener('click', function (e) {
+            if (!userInfo.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+
+        // 退出登录事件
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+
+        // 简历相关事件
+        if (backToHomeFromResumeBtn) {
+            backToHomeFromResumeBtn.addEventListener('click', function() {
+                showSection('hero');
+            });
+        }
+
+        if (navResumeLink) {
+            navResumeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('resume-section');
+                navLinks.forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        }
+
+        startInterviewBtn.disabled = true;
+
+        // 初始化表单验证
+        initFormValidation();
+
+        // 添加"查看学习资源"按钮的事件监听 - 这是修复的关键部分
+        if (backToResourceBtn) {
+            backToResourceBtn.addEventListener('click', function() {
+                showSection('resource-section');
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector('.nav-resource').classList.add('active');
+            });
+        }
+    }
+
+    // 初始化表单验证
+    function initFormValidation() {
+        const formGroups = document.querySelectorAll('.form-group');
+
+        formGroups.forEach(group => {
+            const input = group.querySelector('input, select, textarea');
+            if (input) {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+            }
+        });
+    }
+
+    // 验证单个字段
+    function validateField(field) {
+        const group = field.closest('.form-group');
+        const error = group.querySelector('.error');
+
+        group.classList.remove('invalid');
+
+        if (field.required && !field.value.trim()) {
+            group.classList.add('invalid');
+            return false;
+        }
+
+        if (field.type === 'email' && !validateEmail(field.value)) {
+            group.classList.add('invalid');
+            error.textContent = '请填写有效的邮箱地址';
+            return false;
+        }
+
+        if (field.id === 'phone' && !validatePhone(field.value)) {
+            group.classList.add('invalid');
+            error.textContent = '请填写有效的手机号码';
+            return false;
+        }
+
+        return true;
+    }
+
+    // 验证邮箱格式
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    // 验证手机号码格式
+    function validatePhone(phone) {
+        const re = /^1[3-9]\d{9}$/;
+        return re.test(phone);
+    }
+
+    // 验证整个表单
+    function validateForm() {
+        const hasUploadedFile = fileInput.files.length > 0;
+        if (hasUploadedFile) {
+            return true;
+        }
+
+        let isValid = true;
+        const formGroups = document.querySelectorAll('.form-group');
+
+        formGroups.forEach(group => {
+            const input = group.querySelector('input, select, textarea');
+            if (input && input.required && !input.value.trim()) {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            }
+        });
+
+        return isValid;
+    }
+
+    // 登录成功处理
+    function loginSuccess(user) {
+        isLoggedIn = true;
+        currentUser = user;
+
+        // 显示简历导航项
+        if (navResumeItem) {
+            navResumeItem.classList.remove('hidden');
+        }
+
+        // 保存用户信息到localStorage
+        localStorage.setItem('currentUser', JSON.stringify(user));
+
+        // 更新UI
+        if (authButtons) {
+            authButtons.classList.add('hidden');
+        }
+        if (userInfo) {
+            userInfo.classList.remove('hidden');
+        }
+        if (userAvatar) {
+            userAvatar.textContent = user.name.charAt(0).toUpperCase();
+        }
+
+        // 关闭模态框
+        if (authModal) {
+            authModal.style.display = 'none';
+        }
+
+        // 清除表单
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('register-username').value = '';
+        document.getElementById('register-email').value = '';
+        document.getElementById('register-password').value = '';
+        document.getElementById('register-confirm-password').value = '';
+
+        // 在全局JavaScript部分添加返回按钮的事件处理
+    document.addEventListener('DOMContentLoaded', function () {
+        // 获取返回报告按钮
+        const backToReportBtn = document.getElementById('back-to-report');
+
+        // 添加点击事件处理
+        if (backToReportBtn) {
+            backToReportBtn.addEventListener('click', function() {
+                // 显示综合评测报告界面
+                showSection('comprehensive-report-section');
+
+                // 更新导航栏激活状态
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector('.nav-comprehensive-report').classList.add('active');
+            });
+        }
+    });
+
+        // 新增简历检查
+        const hasSubmittedResume = localStorage.getItem('hasSubmittedResume');
+        if (!hasSubmittedResume) {
+            // 显示简历提交页面
+            showSection('resume-section');
+            // 设置导航栏中的"提交个人简历"为active
+            navLinks.forEach(link => link.classList.remove('active'));
+            if (navResumeLink) {
+                navResumeLink.classList.add('active');
+            }
+        } else {
+            // 如果用户已经提交过简历，显示首页
+            showSection('hero');
+        }
+    }
+
+    // 文件上传处理
+    if (uploadArea) {
+        uploadArea.addEventListener('click', function() {
+            if (fileInput) {
+                fileInput.click();
+            }
+        });
+    }
+
+    let uploadedFile = null;
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                uploadedFile = e.target.files[0];
+                if (fileName) {
+                    fileName.textContent = uploadedFile.name;
+                }
+
+                // 模拟文件上传处理
+                setTimeout(() => {
+                    if (fileName) {
+                        fileName.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> ${uploadedFile.name} (已上传)`;
+                    }
+                    updatePreview();
+                }, 1000);
+            }
+        });
+    }
+
+    // 支持拖放上传
+    if (uploadArea) {
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(26, 115, 232, 0.1)';
+            uploadArea.style.borderColor = 'var(--primary-dark)';
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            uploadArea.style.background = '';
+            uploadArea.style.borderColor = 'var(--primary)';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = '';
+            uploadArea.style.borderColor = 'var(--primary)';
+
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                if (file.type === 'application/pdf' ||
+                    file.type === 'application/msword' ||
+                    file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                    fileInput.files = e.dataTransfer.files;
+                    if (fileName) {
+                        fileName.textContent = file.name;
+                    }
+
+                    // 模拟文件上传处理
+                    setTimeout(() => {
+                        if (fileName) {
+                            fileName.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> ${file.name} (已上传)`;
+                        }
+                        updatePreview();
+                    }, 1000);
+                } else {
+                    alert('请上传PDF或Word文档');
+                }
+            }
+        });
+        initVideoPlayback();
+    }
+
+    // 表单输入时更新预览
+    [fullNameInput, emailInput, phoneInput, educationSelect, schoolInput,
+        majorInput, experienceSelect, skillsInput, resumeContentInput].forEach(input => {
+        if (input) {
+            input.addEventListener('input', updatePreview);
+        }
+    });
+
+    // 更新简历预览
+    function updatePreview() {
+        if (!resumePreview) return;
+
+        let previewHTML = `
+        <h3>${fullNameInput.value || '姓名'}</h3>
+        <p><i class="fas fa-envelope"></i> ${emailInput.value || '邮箱'} |
+        <i class="fas fa-phone"></i> ${phoneInput.value || '电话'}</p>
+        <div style="margin: 20px 0; border-bottom: 1px solid var(--border);"></div>
+    `;
+
+    // 如果有上传文件，显示文件信息
+    if (uploadedFile) {
+        previewHTML += `
+            <h3>上传的简历文件</h3>
+            <p><i class="fas fa-file"></i> ${uploadedFile.name}</p>
+            <div style="margin: 20px 0; border-bottom: 1px solid var(--border);"></div>
+        `;
+    } else {
+        // 如果没有上传文件，显示表单填写的内容
+        previewHTML += `
+            <h3>教育背景</h3>
+            <p><strong>${schoolInput.value || '毕业院校'}</strong> |
+            ${educationSelect.options[educationSelect.selectedIndex]?.text || '学历'} |
+            ${majorInput.value || '专业'}</p>
+
+            <h3>工作经验</h3>
+            <p>${experienceSelect.options[experienceSelect.selectedIndex]?.text || '工作经验'}</p>
+
+            <h3>专业技能</h3>
+            <p>${skillsInput.value || '尚未填写专业技能'}</p>
+
+            <h3>个人经历</h3>
+            <p>${resumeContentInput.value || '尚未填写个人经历'}</p>
+        `;
+    }
+
+    resumePreview.innerHTML = previewHTML;
+    }
+
+    // 提交简历
+    if (submitResumeBtn) {
+        submitResumeBtn.addEventListener('click', function() {
+            // 表单验证
+            if (!validateForm()) {
+                alert('请填写所有必填字段');
+                return;
+            }
+
+            // 创建简历对象
+            const resumeData = {
+                name: fullNameInput.value,
+                email: emailInput.value,
+                phone: phoneInput.value,
+                education: educationSelect.options[educationSelect.selectedIndex]?.text,
+                school: schoolInput.value,
+                major: majorInput.value,
+                experience: experienceSelect.options[experienceSelect.selectedIndex]?.text,
+                skills: skillsInput.value,
+                content: resumeContentInput.value,
+                timestamp: new Date().toLocaleString(),
+                hasFile: uploadedFile !== null
+            };
+
+            // 保存到本地存储
+            localStorage.setItem('userResume', JSON.stringify(resumeData));
+            localStorage.setItem('hasSubmittedResume', 'true');
+
+            // 更新预览显示提交时间
+            if (lastUpdated) {
+                lastUpdated.textContent = `最后提交: ${resumeData.timestamp}`;
+            }
+
+            // 显示成功信息
+            this.innerHTML = '<i class="fas fa-check"></i> 简历已提交';
+            this.style.background = 'var(--success)';
+
+            // 2秒后跳转到岗位选择
+            setTimeout(() => {
+                showSection('position-section');
+                this.innerHTML = '提交简历并继续';
+                this.style.background = '';
+
+                // 更新导航栏
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector('.nav-position').classList.add('active');
+            }, 2000);
+        });
+    }
+
+    // 退出登录处理
+    function logout() {
+        isLoggedIn = false;
+        currentUser = null;
+
+        // 清除本地存储
+        localStorage.removeItem('currentUser');
+
+        // 更新UI
+        if (authButtons) {
+            authButtons.classList.remove('hidden');
+        }
+        if (userInfo) {
+            userInfo.classList.add('hidden');
+        }
+        if (userDropdown) {
+            userDropdown.classList.remove('show');
+        }
+
+        // 隐藏简历导航项
+        if (navResumeItem) {
+            navResumeItem.classList.add('hidden');
+        }
+
+        // 返回首页
+        showSection('hero');
+        alert('您已成功退出登录');
+    }
+
+    // 登录按钮事件
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function () {
+            if (authModal) {
+                authModal.style.display = 'block';
+            }
+            if (loginForm) {
+                loginForm.classList.remove('hidden');
+            }
+            if (registerForm) {
+                registerForm.classList.add('hidden');
+            }
+        });
+    }
+
+    // 注册按钮事件
+    if (registerBtn) {
+        registerBtn.addEventListener('click', function () {
+            if (authModal) {
+                authModal.style.display = 'block';
+            }
+            if (registerForm) {
+                registerForm.classList.remove('hidden');
+            }
+            if (loginForm) {
+                loginForm.classList.add('hidden');
+            }
+        });
+    }
+
+    // 关闭模态框
+    if (closeAuthModal) {
+        closeAuthModal.addEventListener('click', function () {
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+    }
+
+    // 点击模态框外部关闭
+    window.addEventListener('click', function (event) {
+        if (event.target === authModal) {
+            authModal.style.display = 'none';
+        }
+    });
+
+    // 切换到注册表单
+    if (switchToRegister) {
+        switchToRegister.addEventListener('click', function () {
+            if (loginForm) {
+                loginForm.classList.add('hidden');
+            }
+            if (registerForm) {
+                registerForm.classList.remove('hidden');
+            }
+        });
+    }
+
+    // 切换到登录表单
+    if (switchToLogin) {
+        switchToLogin.addEventListener('click', function () {
+            if (registerForm) {
+                registerForm.classList.add('hidden');
+            }
+            if (loginForm) {
+                loginForm.classList.remove('hidden');
+            }
+        });
+    }
+
+    let userList = JSON.parse(localStorage.getItem('userList')) || [];
+
+    if (loginFormSubmit) {
+        loginFormSubmit.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!username || !password) {
+                alert('请输入用户名和密码！');
+                return;
+            }
+
+            // 模拟登录验证
+            if (password.length < 6) {
+                alert('密码长度至少为6位！');
+                return;
+            }
+
+            const user = userList.find(u => u.username === username && u.password === password);
+            if (user) {
+                loginSuccess({ name: username, email: user.email });
+                alert(`欢迎回来，${username}！`);
+            } else {
+                alert(`用户名或密码错误！`);
+            }
+        });
+    }
+
+    // 注册表单提交
+    if (registerFormSubmit) {
+        registerFormSubmit.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            if (!username || !email || !password || !confirmPassword) {
+                alert('请填写所有字段！');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致！');
+                return;
+            }
+
+            const exist = userList.find(u => u.username === username);
+            if (exist) {
+                alert('用户名已存在');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('密码长度至少为6位！');
+                return;
+            }
+
+            // 注册成功
+            const newUser = { username, email, password };
+            userList.push(newUser);
+            localStorage.setItem('userList', JSON.stringify(userList));
+            loginSuccess({
+                name: username,
+                email: email
+            });
+
+            alert(`注册成功，欢迎 ${username}！`);
+        });
+    }
+
+    // 修改开始面试按钮事件处理
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            if (!isLoggedIn) {
+                alert('请先登录！');
+                if (authModal) {
+                    authModal.style.display = 'block';
+                }
+                if (loginForm) {
+                    loginForm.classList.remove('hidden');
+                }
+                if (registerForm) {
+                    registerForm.classList.add('hidden');
+                }
+                return;
+            }
+
+            // 不管是否提交过简历，都跳转到简历提交界面
+            showSection('resume-section');
+            navLinks.forEach(link => link.classList.remove('active'));
+            if (navResumeLink) {
+                navResumeLink.classList.add('active');
+            }
+        });
+    }
+
+    // 岗位卡片选择
+    if (positionCards) {
+        positionCards.forEach(card => {
+            card.addEventListener('click', function () {
+                positionCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPosition = card.getAttribute('data-position');
+                const positionId = this.dataset.position;
+                if (startInterviewBtn) {
+                    startInterviewBtn.disabled = false;
+                }
+                startInterviewBtn.disabled = false;
+
+                // 更新面试问题
+                const position = positionData[positionId];
+                if (positionTag) {
+                    positionTag.textContent = position.name;
+                }
+            });
+        });
+    }
+
+    let currentQuestionIndex = 0;
+    let timeLeft = 135; // 每题倒计时 2 分 15 秒
+    let selectedPosition = '';
+
+    const nextQuestionBtn = document.createElement('button');
+    nextQuestionBtn.className = 'btn btn-outline';
+    nextQuestionBtn.textContent = '下一题';
+    nextQuestionBtn.style.marginTop = '20px';
+    document.querySelector('.interview-panel').appendChild(nextQuestionBtn);
+
+    function loadQuestion(index) {
+        const current = positionData[selectedPosition]?.questions;
+        if (!current || index >= current.length) {
+            clearInterval(interviewTimer);
+            alert('所有问题已完成');
+            return;
+        }
+        if (interviewQuestion) {
+            interviewQuestion.textContent = current[index];
+        }
+        resetTimer();
+    }
+
+    if (nextQuestionBtn) {
+        nextQuestionBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        });
+    }
+
+    function resetTimer() {
+        clearInterval(interviewTimer);
+        timeLeft = 135;
+        updateTimeDisplay();
+        interviewTimer = setInterval(() => {
+            timeLeft--;
+            updateTimeDisplay();
+            console.log('剩余时间：', timeLeft); // 新增日志
+            if (timeLeft <= 0) {
+                clearInterval(interviewTimer);
+                alert('时间到，请进入下一题');
+            }
+        }, 1000);
+    }
+
+    function updateTimeDisplay() {
+        const timeElement = document.getElementById('timer');
+        if (timeElement) {
+            const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            const seconds = String(timeLeft % 60).padStart(2, '0');
+            timeElement.textContent = `剩余时间：${minutes}:${seconds}`;
+        }
+    }
+
+    // 开始面试按钮
+    if (startInterviewBtn) {
+        startInterviewBtn.addEventListener('click', function () {
+            const selectedCard = document.querySelector('.position-card.selected');
+            if (!selectedCard) return;
+
+            selectedPosition = selectedCard.dataset.position;
+            const positionId = selectedCard.dataset.position;
+            const position = positionData[positionId];
+            if (!position) return;
+
+            // 随机选择一个面试问题
+            const randomIndex = Math.floor(Math.random() * position.questions.length);
+            if (interviewQuestion) {
+                interviewQuestion.textContent = position.questions[randomIndex];
+            }
+
+            // 跳转到面试界面
+            showSection('interview-section');
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelector('.nav-interview').classList.add('active');
+            currentQuestionIndex = 0;
+            loadQuestion(currentQuestionIndex);
+        });
+    }
+
+    // 返回首页按钮
+    if (backToHomeBtn) {
+        backToHomeBtn.addEventListener('click', function () {
+            showSection('hero');
+            positionCards.forEach(c => c.classList.remove('selected'));
+            if (startInterviewBtn) {
+                startInterviewBtn.disabled = true;
+            }
+            navLinks.forEach(link => link.classList.remove('active'));
+            const homeLink = document.querySelector('a[data-section="hero"]');
+            if (homeLink) {
+                homeLink.classList.add('active');
+            }
+        });
+    }
+
+    // 返回面试按钮
+    if (backToInterviewBtn) {
+        backToInterviewBtn.addEventListener('click', function () {
+            showSection('interview-section');
+        });
+    }
+
+    // 导航链接点击事件
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('data-section');
+
+            if (!sectionId) return;
+
+            if (!isLoggedIn && sectionId !== 'hero') {
+                alert('请先登录！');
+                if (authModal) {
+                    authModal.style.display = 'block';
+                }
+                if (loginForm) {
+                    loginForm.classList.remove('hidden');
+                }
+                if (registerForm) {
+                    registerForm.classList.add('hidden');
+                }
+                return;
+            }
+
+            // 检查是否已提交简历（除首页和简历页面外）
+            if (sectionId !== 'hero' && sectionId !== 'resume-section') {
+                const hasSubmittedResume = localStorage.getItem('hasSubmittedResume');
+                if (!hasSubmittedResume) {
+                    alert('请先提交个人简历！');
+                    showSection('resume-section');
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    if (navResumeLink) {
+                        navResumeLink.classList.add('active');
+                    }
+                    return;
+                }
+            }
+
+            showSection(sectionId);
+            navLinks.forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+
+            if (sectionId === 'resource-section') {
+                initResourcePage();
+            }
+
+            // 如果是岗位选择页面，检查简历状态
+            if (sectionId === 'position-section')
+            {
+                const hasSubmittedResume = localStorage.getItem('hasSubmittedResume');
+                if (!hasSubmittedResume) {
+                    alert('请先提交个人简历！');
+                    showSection('resume-section');
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    if (navResumeLink) {
+                        navResumeLink.classList.add('active');
+                    }
+                }
+            }
+            if (sectionId === 'comprehensive-report-section') {
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector('.nav-comprehensive-report').classList.add('active');
+            }
+        });
+    });
+
+    let videoStream = null;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let isMicOn = false;
+    let isCameraOn = false;
+    let isRecording = false;
+    let isMediaInitialized = false; //新增：标记是否已初始化媒体设备
+    let mediaAccessPromise = null; //保存媒体访问的Promise
+    // 添加在全局变量区域
+    let recordingTimer = null;
+    let recordingStartTime = 0;
+
+    //获取DOM元素
+    const recordBtn = document.getElementById('record-btn');
+    const videoElement = document.getElementById('video');
+    const canvasElement = document.getElementById('canvas');
+    const videoPlaceholder = document.getElementById('video-placeholder');
+    const toggleMicBtn = document.getElementById('toggle-mic');
+    const toggleCameraBtn = document.getElementById('toggle-camera');
+
+    // 添加音量指示器
+    const volumeIndicator = document.createElement('div');
+    volumeIndicator.className = 'volume-indicator';
+    const volumeLevel = document.createElement('div');
+    volumeLevel.className = 'volume-level';
+    volumeIndicator.appendChild(volumeLevel);
+
+    function initMediaDevices(){
+        if(mediaAccessPromise){
+            return mediaAccessPromise;
+        }
+
+        mediaAccessPromise = new Promise((resolve, reject) => {
+            if(videoStream) {
+                resolve(videoStream);
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then(stream =>{
+                videoStream = stream;
+                videoElement.srcObject = stream;
+
+                //默认关闭摄像头和麦克风
+                const videoTracks = videoStream.getVideoTracks();
+                const audioTracks = videoStream.getAudioTracks();
+
+                videoTracks.forEach(track => track.enabled = false);
+                audioTracks.forEach(track => track.enabled = false);
+
+                isMicOn = false;
+                isCameraOn = false;
+                isMediaInitialized = true;
+
+                // 更新按钮状态
+                toggleMicBtn.style.background = 'var(--accent)';
+                toggleMicBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                toggleCameraBtn.style.background = 'var(--accent)';
+                toggleCameraBtn.innerHTML = '<i class="fas fa-video-slash"></i>';
+
+                videoElement.style.display = 'none';
+                updateDeviceStatus();
+
+                // 初始化音频分析
+                setupAudioAnalyser(stream);
+
+                resolve(stream);
+            }).catch(err => {
+                console.error("Error accessing media devices:", err);
+                document.getElementById('device-status').textContent = "无法访问摄像头或麦克风";
+                reject(err);
+            });
+        });
+
+        return mediaAccessPromise;
+
+    }
+
+    //初始化摄像头
+    function initCamera() {
+        //如果已经初始化，直接返回
+        if(isMediaInitialized){
+            updateDeviceStatus();
+            return Promise.resolve();
+        }
+
+        return initMediaDevices();
+
+    }
+
+    // 设置音频分析器
+    let audioContext;
+    let analyser;
+    let microphone;
+    let javascriptNode;
+
+    function setupAudioAnalyser(stream) {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 32;
+
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(analyser);
+
+            javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+            analyser.connect(javascriptNode);
+            javascriptNode.connect(audioContext.destination);
+
+            javascriptNode.onaudioprocess = function () {
+                if (!isRecording || !isMicOn) return;
+
+                const array = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(array);
+
+                let values = 0;
+                const length = array.length;
+                for (let i = 0; i < length; i++) {
+                    values += array[i];
+                }
+
+                const average = values / length;
+                const percentage = Math.min(100, Math.max(0, average * 0.5));
+
+                volumeLevel.style.width = percentage + '%';
+            };
+        } catch (e) {
+            console.error('Audio analysis error:', e);
+        }
+    }
+
+    //更新设备状态显示
+    function updateDeviceStatus() {
+        let statusElement;
+
+        // 尝试获取录制状态下的设备状态元素
+        if (isRecording) {
+            statusElement = document.getElementById('recording-device-status');
+        } else {
+            statusElement = document.getElementById('device-status');
+        }
+
+        // 如果找不到状态元素，直接返回
+        if (!statusElement) return;
+
+        if (!videoStream) {
+            statusElement.textContent = "设备未初始化";
+            return;
+        }
+
+        const videoTracks = videoStream.getVideoTracks();
+        const audioTracks = videoStream.getAudioTracks();
+
+        const cameraStatus = videoTracks.length > 0 && videoTracks[0].enabled ? "开启" : "关闭";
+        const micStatus = audioTracks.length > 0 && audioTracks[0].enabled ? "开启" : "关闭";
+
+        statusElement.textContent = `摄像头: ${cameraStatus}, 麦克风: ${micStatus}`;
+
+        // 更新占位符图标
+        const placeholderIcon = document.querySelector('.video-placeholder i');
+        if (placeholderIcon) {
+            if (isRecording) {
+                placeholderIcon.className = 'fas fa-circle';
+                placeholderIcon.style.color = 'var(--accent)';
+            } else if (isCameraOn) {
+                placeholderIcon.className = 'fas fa-video';
+                placeholderIcon.style.color = 'var(--primary)';
+            } else {
+                placeholderIcon.className = 'fas fa-user';
+                placeholderIcon.style.color = 'var(--primary)';
+            }
+        }
+    }
+
+    function startRecordingTimer() {
+        const timerElement = document.getElementById('recording-timer');
+        recordingStartTime = Date.now();
+
+        recordingTimer = setInterval(() => {
+            const elapsedSeconds = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+            const seconds = String(elapsedSeconds % 60).padStart(2, '0');
+
+            if (timerElement) {
+                timerElement.textContent = `${minutes}:${seconds}`;
+            }
+        }, 1000);
+    }
+
+    function stopRecordingTimer() {
+        if (recordingTimer) {
+            clearInterval(recordingTimer);
+            recordingTimer = null;
+        }
+    }
+
+    //开始录制
+    function startRecording() {
+        initCamera().then(()=>{
+            if (!videoStream) {
+                alert('请先开启摄像头!');
+                return;
+            }
+
+            const videoTracks = videoStream.getVideoTracks();
+            const audioTracks = videoStream.getAudioTracks();
+
+            if (videoTracks.length === 0 || !videoTracks[0].enabled) {
+                alert('请先开启摄像头！');
+                return;
+            }
+
+            recordedChunks = [];
+            const options = {
+                mimeType: 'video/webm;codecs=vp9'
+            };
+
+            try {
+                mediaRecorder = new MediaRecorder(videoStream, options);
+            } catch (e) {
+                console.error('Exception while creating MediaRecorder:', e);
+                alert('无法创建媒体录制器: ' + e.message);
+                return;
+            }
+
+            mediaRecorder.ondataavailable = function (e) {
+                if (e.data.size > 0) {
+                    recordedChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.start(100);
+            isRecording = true;
+            recordingStartTime = Date.now();
+
+            // 更新UI - 保留设备状态元素
+            recordBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            recordBtn.style.background = 'var(--accent)';
+
+            // 创建新的状态元素
+            const statusElement = document.createElement('div');
+            statusElement.id = 'device-status';
+            statusElement.style.fontSize = '14px';
+            statusElement.style.marginTop = '10px';
+
+            videoPlaceholder.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 15px; color: var(--accent);">
+                            <i class="fas fa-circle"></i> 录制中
+                        </div>
+                        <p>正在录制你的回答...</p>
+                        <div id="recording-timer" style="font-size: 18px; margin-top: 10px;">00:00</div>
+                    </div>
+                </div>
+            `;
+
+            // 添加状态元素
+            videoPlaceholder.querySelector('div > div').appendChild(statusElement);
+
+            startRecordingTimer();
+            updateDeviceStatus();
+        }).catch(err => {
+            console.error("Failed to initialize media devices:",err);
+            alert("无法访问摄像头或麦克风，请确保已授予权限");
+        });
+    }
+
+    function updateRecordingCompleteUI(){
+        videoPlaceholder.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                <div style="text-align: center;">
+                    <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 15px;"></i>
+                    <p style="font-size: 18px;">录制完成</p>
+                    <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+                        <button class="btn btn-outline" id="playback-btn" style="padding: 8px 15px; font-size: 14px;">
+                            <i class="fas fa-play" style="font-size: 12px; color: var(--primary);"></i> 回放
+                        </button>
+                        <button class="btn download-btn btn-outline" id="download-btn" style="padding: 8px 15px; font-size: 14px;">
+                            <i class="fas fa-download" style="font-size: 12px; color: var(--primary);"></i> 下载
+                        </button>
+                        <button class="btn btn-outline retry-btn" id="retry-btn" style="padding: 8px 15px; font-size: 14px;">
+                            <i class="fas fa-redo" style="font-size: 12px; color: var(--primary);"></i> 重录
+                        </button>
+                    </div>
+                    <div class="recording-time" style="margin-top: 15px;">
+                        录制时长: ${formatTime(Math.floor((Date.now() - recordingStartTime) / 1000))}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        //绑定按钮事件
+        document.getElementById('playback-btn').addEventListener('click',playRecording);
+        document.getElementById('download-btn').addEventListener('click',downloadRecording);
+        document.getElementById('retry-btn').addEventListener('click',retryRecording);
+    }
+
+    //停止录制
+    function stopRecording() {
+        if (mediaRecorder && isRecording) {
+            mediaRecorder.stop();
+            isRecording = false;
+            stopRecordingTimer();
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                window.lastRecordingBlob = blob; //保存录制数据
+                const url = URL.createObjectURL(blob);
+                window.lastRecordingUrl = url;
+
+                //更新UI显示录制完成
+                updateRecordingCompleteUI();
+            }
+
+        }
+    }
+
+    function downloadRecording() {
+        if (!window.lastRecordingBlob) {
+            alert('没有可下载的录制内容');
+            return;
+        }
+
+        const url = URL.createObjectURL(window.lastRecordingBlob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+
+        // 获取当前日期时间作为文件名
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
+        a.download = `面试录制_${dateStr}.webm`;
+
+        document.body.appendChild(a);
+        a.click();
+
+        // 清理
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+    }
+
+    // 格式化时间显示
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
+    }
+
+    // 重试录制
+    function retryRecording() {
+        // 停止当前录制
+        if (isRecording) {
+            stopRecording();
+        }
+
+        // 清除之前的录制
+        recordedChunks = [];
+
+        // 重置UI
+        videoPlaceholder.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                <div style="text-align: center;">
+                    <i class="fas fa-user" style="font-size: 60px; color: var(--primary); margin-bottom: 15px;"></i>
+                    <p>准备开始录制你的面试回答</p>
+                    <p id="device-status" style="font-size: 14px; margin-top: 10px;">请确保摄像头和麦克风已启用</p>
+                </div>
+            </div>
+        `;
+
+        // 重置按钮状态
+        recordBtn.innerHTML = '<i class="fas fa-record-vinyl"></i>';
+        recordBtn.style.background = 'var(--primary)';
+        isRecording = false;
+
+        // 重置计时器
+        stopRecordingTimer();
+
+        // 重新显示视频元素
+        if (videoStream) {
+            const videoTracks = videoStream.getVideoTracks();
+            if (videoTracks.length > 0 && videoTracks[0].enabled) {
+                videoElement.style.display = 'block';
+            }
+        }
+
+        alert('已重置录制状态，可以重新开始录制');
+        initCamera();
+
+        // 重置视频显示
+        videoElement.style.display = 'none';
+        videoPlaceholder.style.display = 'flex';
+    }
+
+    // 修改 playRecording 函数
+    function playRecording() {
+        if (!window.lastRecordingBlob) {
+            alert('没有可回放的录制内容');
+            return;
+        }
+        const url = window.lastRecordingUrl || URL.createObjectURL(window.lastRecordingBlob);
+        window.lastRecordingUrl = url; // 确保保存 URL
+
+        videoPlaceholder.innerHTML = `
+            <div style="position: relative; width: 100%; height: 100%; background: black;">
+                <video controls autoplay style="width: 100%; height: 100%;">
+                    <source src="${url}" type="video/webm">
+                    您的浏览器不支持视频播放
+                </video>
+                <button class="btn btn-primary" id="close-playback"
+                    style="position: absolute; top: 3px; right: 3px; z-index: 100; padding: 4px 8px; font-size: 8px; background: rgba(0,0,0,0.5);">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div style="position: absolute; bottom: 10px; left: 0; right: 0; text-align: center;">
+                    <span style="color: rgba(255,255,255,0.8); font-size: 12px;">
+                        正在回放面试回答
+                    </span>
+                </div>
+            </div>
+        `;
+
+        // 添加关闭回放按钮事件
+        document.getElementById('close-playback')?.addEventListener('click', () => {
+            // 释放内存
+            if(window.lastRecordingUrl){
+                URL.revokeObjectURL(window.lastRecordingUrl);
+                window.lastRecordingUrl = null;
+            }
+            updateRecordingCompleteUI();
+        });
+    }
+
+   // 切换麦克风
+    function toggleMic() {
+        if (videoStream) {
+            const audioTracks = videoStream.getAudioTracks();
+            if (audioTracks.length > 0) {
+                audioTracks.forEach(track => {
+                    track.enabled = !track.enabled;
+                });
+                isMicOn = !isMicOn;
+                toggleMicBtn.style.background = isMicOn ? 'var(--primary)' : 'var(--accent)';
+                toggleMicBtn.innerHTML = `<i class="fas fa-microphone${isMicOn ? '' : '-slash'}"></i>`;
+                updateDeviceStatus();
+            } else {
+                alert('麦克风不可用!');
+            }
+        } else {
+            alert('请先开启麦克风！');
+        }
+    }
+
+    // 切换摄像头
+    function toggleCamera() {
+        if (videoStream) {
+            const videoTracks = videoStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+                videoTracks.forEach(track => {
+                    track.enabled = !track.enabled;
+                });
+                isCameraOn = !isCameraOn;
+                toggleCameraBtn.style.background = isCameraOn ? 'var(--primary)' : 'var(--accent)';
+                toggleCameraBtn.innerHTML = `<i class="fas fa-video${isCameraOn ? '' : '-slash'}"></i>`;
+
+                // 根据摄像头状态更新视频显示
+                if (isCameraOn) {
+                    videoElement.style.display = 'block';
+                } else {
+                    videoElement.style.display = 'none';
+                }
+
+                updateDeviceStatus();
+            } else {
+                alert('摄像头不可用！');
+            }
+        } else {
+            alert('请先开启摄像头！');
+        }
+
+    }
+
+    // 添加事件监听器
+    recordBtn.addEventListener('click', function () {
+        if (!isRecording) {
+            // 检查摄像头是否已开启
+            const videoTracks = videoStream?.getVideoTracks() || [];
+            const isCameraEnabled = videoTracks.length > 0 && videoTracks[0].enabled;
+
+            if (!isCameraEnabled) {
+                alert('请先开启摄像头！');
+                return;
+            }
+
+            startRecording();
+
+            // 更新占位符显示
+            videoPlaceholder.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 15px; color: var(--accent);">
+                            <i class="fas fa-circle"></i> 录制中
+                        </div>
+                        <p>正在录制你的回答...</p>
+                        <div id="recording-timer" style="font-size: 18px; margin-top: 10px;">00:00</div>
+                    </div>
+                </div>
+            `;
+        } else {
+            stopRecording();
+
+            // 更新占位符显示
+            videoPlaceholder.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 15px;"></i>
+                        <p style="font-size: 18px;">录制完成</p>
+                        <button class="btn btn-outline" id="playback-btn" style="margin-top: 15px;">
+                            <i class="fas fa-play"></i> 回放
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    toggleMicBtn.addEventListener('click', toggleMic);
+    toggleCameraBtn.addEventListener('click', toggleCamera);
+
+    // 当进入面试页面时初始化摄像头
+    document.querySelector('.nav-interview').addEventListener('click', function () {
+        if (interviewSection.classList.contains('hidden')) {
+            //只有当前不在面试页面时才初始化摄像头
+            return;
+        }
+        initCamera();
+    });
+
+    //添加面试部分显示时的事件监听
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.attributeName === 'class') {
+                const isInterviewVisible = interviewSection.classList.contains('active-section');
+                if (isInterviewVisible) {
+                    initCamera().catch(err =>{
+                        alert("无法访问摄像头或麦克风，请确保已授予权限");
+                    });
+                } else if (videoStream) {
+                    updateDeviceStatus();
+                }
+            }
+        });
+    });
+
+    observer.observe(interviewSection, {
+        attributes: true
+    });
+
+    // 清理媒体流
+    window.addEventListener('beforeunload', function () {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+        }
+        if (mediaRecorder && isRecording) {
+            mediaRecorder.stop();
+        }
+    });
+
+    // 提交答案按钮
+    submitBtn.addEventListener('click', function() {
+        // 进入分析状态
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 分析中...';
+        this.disabled = true;
+
+        // 模拟分析过程
+        setTimeout(() => {
+            // 显示评测结果
+            showSection('comprehensive-report-section');
+
+            // 生成报告数据
+            generateUniqueReportData();
+
+            // 更新图表数据
+            updateCharts();
+        }, 3000);
+    });
+
+    function generateUniqueReportData() {
+        // 能力维度分数 (确保不重复)
+        const allPossibleScores = Array.from({ length: 26 }, (_, i) => i + 75); // 75-100之间的分数
+        const availableScores = allPossibleScores.filter(score => !previousScores.includes(score));
+        // 新增：获取简历数据
+        const resumeData = JSON.parse(localStorage.getItem('userResume'));
+
+        // 如果没有可用分数了，重置记录
+        if (availableScores.length === 0) {
+            previousScores = [];
+            availableScores = [...allPossibleScores];
+        }
+
+        // 随机选择一个分数
+        const randomScore = availableScores[Math.floor(Math.random() * availableScores.length)];
+        previousScores.push(randomScore);
+
+        // 更新总分显示
+        document.querySelector('.score-display').innerHTML = `
+        ${randomScore}<span style="font-size: 2rem; color: var(--text-light);">/100</span>
+    `;
+
+        // 优势分析选项
+        const strengthOptions = [
+            {
+                title: "教育背景优秀",
+                content: `您的${resumeData.education}学历和${resumeData.major}专业为职位提供了良好基础`
+            },
+            {
+                title: "相关技能匹配",
+                content: `您掌握的${resumeData.skills.split(',').slice(0,2).join(',')}等技能与岗位要求高度匹配`
+            },
+            {
+                title: "专业知识扎实",
+                content: "对机器学习概念和技术有深入理解，能够准确描述算法原理"
+            },
+            {
+                title: "项目经验丰富",
+                content: "项目描述完整，展示了实际应用能力"
+            },
+            {
+                title: "逻辑思维清晰",
+                content: "问题分析条理清晰，解决方案合理"
+            },
+            {
+                title: "技术能力突出",
+                content: "在算法和编程方面表现出色，具备扎实的技术基础"
+            },
+            {
+                title: "学习能力优秀",
+                content: "对新技术的接受和学习能力强"
+            }
+        ];
+
+        // 改进建议选项
+        const improvementOptions = [
+            {
+                title: "结构化表达",
+                content: "建议使用STAR法则（情境、任务、行动、结果）来组织回答"
+            },
+            {
+                title: "眼神交流",
+                content: "面试中与摄像头保持眼神接触，增强互动感"
+            },
+            {
+                title: "控制语速",
+                content: "回答时适当放慢语速，确保表达清晰"
+            },
+            {
+                title: "时间管理",
+                content: "回答时间控制在2-3分钟，避免过长的描述"
+            },
+            {
+                title: "商业意识",
+                content: "加强技术解决方案与业务价值的关联性思考"
+            }
+        ];
+
+        // 选择3个不重复的优势
+        const selectedStrengths = [];
+        const availableStrengths = strengthOptions.filter(opt =>
+            !previousStrengths.some(s => s.title === opt.title)
+        );
+
+        for (let i = 0; i < 3 && availableStrengths.length > 0; i++) {
+            const randomIndex = Math.floor(Math.random() * availableStrengths.length);
+            selectedStrengths.push(availableStrengths[randomIndex]);
+            availableStrengths.splice(randomIndex, 1);
+        }
+
+        // 如果没有足够的独特优势，重置记录
+        if (selectedStrengths.length < 3) {
+            previousStrengths = [];
+            selectedStrengths.push(...strengthOptions.slice(0, 3));
+        } else {
+            previousStrengths.push(...selectedStrengths);
+        }
+
+        // 选择4个不重复的改进建议
+        const selectedImprovements = [];
+        const availableImprovements = improvementOptions.filter(opt =>
+            !previousImprovements.some(i => i.title === opt.title)
+        );
+
+        for (let i = 0; i < 4 && availableImprovements.length > 0; i++) {
+            const randomIndex = Math.floor(Math.random() * availableImprovements.length);
+            selectedImprovements.push(availableImprovements[randomIndex]);
+            availableImprovements.splice(randomIndex, 1);
+        }
+
+        // 如果没有足够的独特改进建议，重置记录
+        if (selectedImprovements.length < 4) {
+            previousImprovements = [];
+            selectedImprovements.push(...improvementOptions.slice(0, 4));
+        } else {
+            previousImprovements.push(...selectedImprovements);
+        }
+        // 在页面加载时检查是否已提交简历
+        const hasSubmittedResume = localStorage.getItem('hasSubmittedResume');
+        if (hasSubmittedResume) {
+            const resumeData = JSON.parse(localStorage.getItem('userResume'));
+            lastUpdated.textContent = `最后提交: ${resumeData.timestamp || '未知时间'}`;
+
+            // 填充预览
+            if (resumeData.name) {
+                fullNameInput.value = resumeData.name;
+                emailInput.value = resumeData.email;
+                phoneInput.value = resumeData.phone;
+                schoolInput.value = resumeData.school;
+                majorInput.value = resumeData.major;
+                skillsInput.value = resumeData.skills;
+                resumeContentInput.value = resumeData.content;
+
+                //设置下拉框
+                Array.from(educationSelect.options).forEach(option => {
+                    if (option.text === resumeData.education) {
+                        educationSelect.value = option.value;
+                    }
+                });
+
+                Array.from(experienceSelect.options).forEach(option => {
+                    if (option.text === resumeData.experience) {
+                        experienceSelect.value = option.value;
+                    }
+                });
+
+                updatePreview();
+            }
+        }
+
+        // 更新优势分析部分
+        const strengthsList = document.querySelector('.strengths-list');
+        strengthsList.innerHTML = selectedStrengths.map(strength => `
+        <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <strong>${strength.title}</strong> - ${strength.content}
+            </div>
+        </li>
+    `).join('');
+
+        // 更新改进建议部分
+        const improvementsList = document.querySelector('.improvements-list');
+        improvementsList.innerHTML = selectedImprovements.map(improvement => `
+        <li>
+            <i class="fas fa-arrow-circle-right"></i>
+            <div>
+                <strong>${improvement.title}</strong> - ${improvement.content}
+            </div>
+        </li>
+    `).join('');
+    }
+
+    // 更新图表数据（模拟）
+    function updateCharts() {
+        // 生成随机分数数据 (确保与总分匹配)
+        const totalScore = parseInt(document.querySelector('.score-display').textContent);
+        const baseScores = Array.from({ length: 6 }, () => Math.floor(Math.random() * 20) + 70);
+
+        // 调整分数使其平均值接近总分
+        const currentAvg = baseScores.reduce((a, b) => a + b, 0) / baseScores.length;
+        const adjustmentFactor = totalScore / currentAvg;
+        const adjustedScores = baseScores.map(score => Math.min(100, Math.max(70, Math.round(score * adjustmentFactor))));
+
+        // 更新雷达图
+        if (radarChart) {
+            radarChart.data.datasets[0].data = adjustedScores;
+            radarChart.update();
+        }
+
+        // 更新柱状图
+        if (barChart) {
+            barChart.data.datasets[0].data = adjustedScores;
+            barChart.update();
+        }
+    }
+
+    // 初始化图表
+    function initCharts() {
+        // 只在画布元素存在时初始化图表
+        if (document.getElementById('radarChart')) {
+            // 初始化雷达图
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['专业知识', '技能匹配', '语言表达', '逻辑思维', '应变能力', '创新能力'],
+                    datasets: [{
+                        data: [85, 90, 80, 75, 80, 85],
+                        backgroundColor: 'rgba(26, 115, 232, 0.2)',
+                        borderColor: 'rgba(26, 115, 232, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(26, 115, 232, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(26, 115, 232, 1)'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100,
+                            stepSize: 20
+                        }
+                    }
+                }
+            });
+        }
+
+        if (document.getElementById('barChart')) {
+            // 初始化柱状图
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['专业知识', '技能匹配', '语言表达', '逻辑思维', '应变能力', '创新能力'],
+                    datasets: [{
+                        label: '得分',
+                        data: [85, 90, 80, 75, 80, 85],
+                        backgroundColor: 'rgba(26, 115, 232, 0.7)',
+                        borderColor: 'rgba(26, 115, 232, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+// 视频资源映射（资源ID -> B站视频ID）
+    const videoResources = {
+        2: "BV1mq4y137p6", // 高效表达训练营
+        4: "BV1q64y1v73N", // 面试中的眼神交流技巧
+        5: "BV1q64y1v73N", // 虚拟面试中的眼神接触训练
+        8: "BV1wF411w7oA", // 面试时间管理策略
+        7: "BV1xb4y1i7FQ", // 演讲与表达：语速节奏训练
+        9: "BV1Ug411z7wK", // 精准表达：2分钟说清复杂问题
+        11:" BV1Hp4y1r7YY", // 产品经理实战案例解析
+        12: "BV1hN4y1A7Qh", // 行为面试问题全解析
+        13:" BV1L24y1i7v3"  // 深度学习基础与应用
+    };
+
+    // 初始化视频播放功能
+    function initVideoPlayback() {
+        const videoModal = document.getElementById('video-modal');
+        const closeVideoModal = document.getElementById('close-video-modal');
+        const videoPlayer = document.getElementById('video-player');
+
+        // 关闭模态框
+        closeVideoModal.addEventListener('click', function() {
+            videoModal.style.display = 'none';
+            videoPlayer.innerHTML = '';
+        });
+
+        // 点击外部关闭
+        videoModal.addEventListener('click', function(e) {
+            if (e.target === videoModal) {
+                videoModal.style.display = 'none';
+                videoPlayer.innerHTML = '';
+            }
+        });
+
+        // 事件委托绑定资源卡片点击
+        document.querySelectorAll('#recommended-resources, #all-resources').forEach(container => {
+            container.addEventListener('click', function(e) {
+                const resourceCard = e.target.closest('.resource-card');
+                if (resourceCard && !e.target.closest('.bookmark')) {
+                    const resourceId = resourceCard.dataset.id;
+                    const bvid = videoResources[resourceId];
+
+                    if (bvid) {
+                        const title = resourceCard.querySelector('h3').textContent;
+                        document.getElementById('video-modal-title').textContent = title;
+
+                        videoPlayer.innerHTML = `
+                            <iframe
+                                src="https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=1"
+                                scrolling="no"
+                                border="0"
+                                frameborder="no"
+                                framespacing="0"
+                                allowfullscreen="true">
+                            </iframe>
+                        `;
+                        videoModal.style.display = 'flex';
+                    }
+                }
+            });
+        });
+    }
+
+    // 在页面加载和资源部分显示时初始化视频播放
+    document.addEventListener('DOMContentLoaded', function() {
+        initVideoPlayback();
+    });
+    // 显示指定区域，隐藏其他区域
+    function showSection(sectionId) {
+        // 隐藏所有区域
+        const sections = [
+            heroSection, positionSection, interviewSection,
+            resultSection, resourceSection, collectionSection,
+            personalizedSection, resumeSection, comprehensiveReportSection
+        ];
+        // 隐藏所有区域
+        sections.forEach(section => {
+            if (section) {
+                section.classList.add('hidden');
+                section.classList.remove('active-section')
+            }
+        });
+
+        // 显示目标区域
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.remove('hidden');
+            targetSection.classList.add('active-section');
+        }
+
+        // 在报告部分显示时初始化图表
+        if (sectionId === 'comprehensive-report-section') {
+            setTimeout(initCharts, 100);
+        }
+        if (sectionId === 'resource-section') {
+            setTimeout(initVideoPlayback, 300);
+            setTimeout(initResourcePage, 100); // 初始化资源页面
+        setTimeout(initVideoPlayback, 300); // 初始化视频播放
+        }
+}
+    // 初始化资源页面
+            function initResourcePage() {
+                // 学习资源数据库
+                resources = [
+                    // 结构化表达相关资源
+                    {
+                        id: 1,
+                        title: "STAR法则：面试回答的黄金结构",
+                        description: "深度解析STAR法则在面试中的应用，通过实例展示如何构建有说服力的回答",
+                        type: "文章",
+                        category: "沟通表达",
+                        tags: ["结构化表达", "STAR法则", "面试技巧"],
+                        duration: "12分钟阅读",
+                        progress: 0,
+                        level: "初级",
+                        icon: "book",
+                        recommended: true,
+                        keyword: "结构化表达"
+                    },
+                    {
+                        id: 2,
+                        title: "高效表达训练营",
+                        description: "7天结构化表达训练课程，包含实战演练和专家反馈",
+                        type: "课程",
+                        category: "沟通表达",
+                        tags: ["结构化表达", "逻辑思维", "沟通技巧"],
+                        duration: "7天课程",
+                        progress: 0,
+                        level: "中级",
+                        icon: "graduation-cap",
+                        recommended: true,
+                        keyword: "结构化表达",
+                        videoUrl: "https://www.bilibili.com/video/BV1mq4y137p6?t=4.2"
+                    },
+                    {
+                        id: 3,
+                        title: "金字塔原理：结构化思维与表达",
+                        description: "学习如何组织思想，使表达更清晰有力",
+                        type: "书籍",
+                        category: "沟通表达",
+                        tags: ["结构化表达", "思维训练", "逻辑思维"],
+                        duration: "320页",
+                        progress: 0,
+                        level: "进阶",
+                        icon: "book",
+                        recommended: true,
+                        keyword: "结构化表达"
+                    },
+
+                    // 眼神交流相关资源
+                    {
+                        id: 4,
+                        title: "面试中的眼神交流技巧",
+                        description: "如何通过眼神交流建立信任和连接，提升面试表现",
+                        type: "视频",
+                        category: "面试技巧",
+                        tags: ["眼神交流", "非语言沟通", "面试表现"],
+                        duration: "18分钟",
+                        progress: 0,
+                        level: "初级",
+                        icon: "video",
+                        recommended: true,
+                        keyword: "眼神交流",
+                        videoUrl: "https://www.bilibili.com/video/BV1q64y1v73N?t=57.8"
+                    },
+                    {
+                        id: 5,
+                        title: "虚拟面试中的眼神接触训练",
+                        description: "针对视频面试的特殊训练，帮助你在镜头前保持自然的眼神交流",
+                        type: "课程",
+                        category: "面试技巧",
+                        tags: ["眼神交流", "视频面试", "非语言沟通"],
+                        duration: "5天训练",
+                        progress: 0,
+                        level: "中级",
+                        icon: "graduation-cap",
+                        recommended: true,
+                        keyword: "眼神交流",
+                        videoUrl: "https://www.bilibili.com/video/BV1q64y1v73N?t=71.9"
+                    },
+
+                    // 控制语速相关资源
+                    {
+                        id: 6,
+                        title: "语速控制：让面试官听懂你的每个字",
+                        description: "掌握语速控制技巧，使表达更清晰有说服力",
+                        type: "文章",
+                        category: "沟通表达",
+                        tags: ["控制语速", "表达清晰度", "沟通技巧"],
+                        duration: "8分钟阅读",
+                        progress: 0,
+                        level: "初级",
+                        icon: "book",
+                        recommended: true,
+                        keyword: "控制语速"
+                    },
+                    {
+                        id: 7,
+                        title: "演讲与表达：语速节奏训练",
+                        description: "专业语音教练指导，帮助您找到最佳语速和节奏",
+                        type: "课程",
+                        category: "沟通表达",
+                        tags: ["控制语速", "演讲技巧", "声音训练"],
+                        duration: "6小时课程",
+                        progress: 0,
+                        level: "中级",
+                        icon: "graduation-cap",
+                        recommended: true,
+                        keyword: "控制语速",
+                        videoUrl: "https://www.bilibili.com/video/BV1xb4y1i7FQ?t=4.8"
+                    },
+
+                    // 时间管理相关资源
+                    {
+                        id: 8,
+                        title: "面试时间管理策略",
+                        description: "如何在有限时间内给出完整有力的回答",
+                        type: "视频",
+                        category: "面试技巧",
+                        tags: ["时间管理", "回答策略", "面试准备"],
+                        duration: "22分钟",
+                        progress: 0,
+                        level: "初级",
+                        icon: "video",
+                        recommended: true,
+                        keyword: "时间管理",
+                        videoUrl: "https://www.bilibili.com/video/BV1wF411w7oA?t=63.7"
+                    },
+                    {
+                        id: 9,
+                        title: "精准表达：2分钟说清复杂问题",
+                        description: "训练在有限时间内清晰表达复杂想法的能力",
+                        type: "课程",
+                        category: "沟通表达",
+                        tags: ["时间管理", "精准表达", "思维训练"],
+                        duration: "4周训练",
+                        progress: 0,
+                        level: "进阶",
+                        icon: "graduation-cap",
+                        recommended: true,
+                        keyword: "时间管理",
+                        videoUrl:"https://www.bilibili.com/video/BV1Ug411z7wK?t=139.4"
+                    },
+
+                    // 其他资源
+                    {
+                        id: 10,
+                        title: "机器学习面试指南",
+                        description: "涵盖机器学习岗位常见问题与解答",
+                        type: "书籍",
+                        category: "专业知识",
+                        tags: ["机器学习", "面试题库", "技术面试"],
+                        duration: "280页",
+                        progress: 0,
+                        level: "中级",
+                        icon: "book",
+                        recommended: false,
+                        keyword: ""
+                    },
+                    {
+                        id: 11,
+                        title: "产品经理实战案例解析",
+                        description: "通过真实产品案例学习产品设计与决策",
+                        type: "课程",
+                        category: "专业知识",
+                        tags: ["产品经理", "案例分析", "产品设计"],
+                        duration: "8小时",
+                        progress: 0,
+                        level: "中级",
+                        icon: "graduation-cap",
+                        recommended: false,
+                        keyword: "",
+                        videoUrl:"https://www.bilibili.com/video/BV1Hp4y1r7YY?t=2.4"
+                    },
+                    {
+                        id: 12,
+                        title: "行为问题面试全解析",
+                        description: "如何有效回答行为面试问题，展示你的核心能力",
+                        type: "视频",
+                        category: "面试技巧",
+                        tags: ["行为面试", "问题回答", "面试准备"],
+                        duration: "35分钟",
+                        progress: 0,
+                        level: "初级",
+                        icon: "video",
+                        recommended: false,
+                        keyword: "",
+                        videoUrl: "https://www.bilibili.com/video/BV1hN4y1A7Qh?t=34.4"
+                    },
+                    {
+                        id: 13,
+                        title: "深度学习基础与应用",
+                        description: "从基础概念到实际应用，全面掌握深度学习知识",
+                        type: "课程",
+                        category: "专业知识",
+                        tags: ["深度学习", "神经网络", "AI基础"],
+                        duration: "12小时",
+                        progress: 0,
+                        level: "中级",
+                        icon: "graduation-cap",
+                        recommended: false,
+                        keyword: "",
+                        videoUrl:"https://www.bilibili.com/video/BV1L24y1i7v3?t=3.0"
+                    },
+                    {
+                        id: 14,
+                        title: "逻辑思维训练手册",
+                        description: "提升问题分析和解决能力的实用指南",
+                        type: "书籍",
+                        category: "思维能力",
+                        tags: ["逻辑思维", "问题解决", "分析能力"],
+                        duration: "240页",
+                        progress: 0,
+                        level: "初级",
+                        icon: "book",
+                        recommended: false,
+                        keyword: ""
+                    }
+                ];
+
+                // 根据评测建议生成推荐资源
+                const improvementKeywords = ["结构化表达", "眼神交流", "控制语速", "时间管理"];
+                filteredResources = resources.filter(res =>
+                    improvementKeywords.includes(res.keyword)
+                );
+
+                // 其他资源
+                filteredAllResources = resources.filter(res => !res.recommended);
+
+                // 渲染资源卡片
+                renderRecommendedResources();
+                renderAllResources();
+
+                // 添加筛选事件
+                document.querySelectorAll('.recommendation-section .filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // 更新按钮状态
+                        document.querySelectorAll('.recommendation-section .filter-btn').forEach(b => {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+
+                        const filter = this.dataset.filter;
+                        if (filter === 'all') {
+                            filteredResources = resources.filter(res =>
+                                improvementKeywords.includes(res.keyword)
+                            );
+                        } else {
+                            filteredResources = resources.filter(res =>
+                                res.keyword === filter
+                            );
+                        }
+
+                        renderRecommendedResources();
+                    });
+                });
+
+                // 添加类别筛选事件
+                document.querySelectorAll('.category-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.category-card').forEach(c => {
+                            c.classList.remove('active');
+                        });
+                        this.classList.add('active');
+
+                        const category = this.dataset.category;
+                        filteredAllResources = resources.filter(res =>
+                            res.category === category
+                        );
+
+                        renderAllResources();
+                        document.getElementById('all-resources').scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+
+                // 添加类型筛选事件
+                document.querySelectorAll('.search-section .filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.search-section .filter-btn').forEach(b => {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+
+                        const type = this.dataset.type;
+                        if (type === 'all') {
+                            filteredAllResources = resources.filter(res => !res.recommended);
+                        } else {
+                            filteredAllResources = resources.filter(res =>
+                                res.type === type && !res.recommended
+                            );
+                        }
+
+                        renderAllResources();
+                    });
+                });
+
+                // 添加搜索事件
+                searchBtn.addEventListener('click', performSearch);
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+
+                // 模拟进度条动画
+                setTimeout(() => {
+                    document.querySelectorAll('.progress').forEach(progress => {
+                        const width = Math.floor(Math.random() * 100);
+                        progress.style.width = `${width}%`;
+                    });
+                }, 500);
+            }
+
+            // 渲染推荐资源
+            function renderRecommendedResources() {
+                recommendedContainer.innerHTML = filteredResources.map(renderResourceCard).join('');
+                addVideoPlayEvents();
+            }
+
+            // 渲染所有资源
+            function renderAllResources() {
+                allContainer.innerHTML = filteredAllResources.map(renderResourceCard).join('');
+                addVideoPlayEvents();
+            }
+
+            // 渲染资源卡片
+            function renderResourceCard(resource) {
+                const icons = {
+                    "文章": "file-alt",
+                    "视频": "video",
+                    "课程": "graduation-cap",
+                    "书籍": "book"
+                };
+
+                const colors = {
+                    "文章": "#4caf50",
+                    "视频": "#ff9800",
+                    "课程": "#2196f3",
+                    "书籍": "#9c27b0"
+                };
+
+                return `
+                <div class="resource-card" data-id="${resource.id}">
+                    <div class="resource-type" style="background: ${colors[resource.type] || '#1a73e8'}">
+                        ${resource.type}
+                    </div>
+                    <div class="resource-image">
+                        <i class="fas fa-${resource.icon || 'book'}"></i>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">
+                            <h3>${resource.title}</h3>
+                        </div>
+                        <p class="resource-description">${resource.description}</p>
+                        <div class="resource-tags">
+                            ${resource.tags.map(tag => `<div class="tag">${tag}</div>`).join('')}
+                        </div>
+                        <div class="resource-meta">
+                            <span>${resource.duration}</span>
+                            <span>${resource.level}</span>
+                        </div>
+                        ${resource.progress > 0 ? `
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${resource.progress}%"></div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                `;
+            }
+
+            // 修改后的 addVideoPlayEvents 函数
+function addVideoPlayEvents() {
+    document.querySelectorAll('.resource-card').forEach(card => {
+        // 只绑定卡片主体区域，排除收藏按钮
+        const contentArea = card.querySelector('.resource-content');
+        if (contentArea) {
+            contentArea.addEventListener('click', function(e) {
+                const resourceId = parseInt(card.dataset.id);
+                const resource = resources.find(r => r.id === resourceId);
+
+                if (resource && resource.videoUrl) {
+                    playVideo(resource);
+                }
+            });
+        }
+    });
+}
+
+            // 播放视频
+            function playVideo(resource) {
+                videoTitle.textContent = resource.title;
+                videoDescription.textContent = resource.description;
+
+                // 创建B站视频嵌入代码
+                const videoId = resource.videoUrl.split('/').pop().split('?')[0];
+                const embedUrl = `https://player.bilibili.com/player.html?bvid=${videoId}&autoplay=1`;
+
+                videoPlayer.innerHTML = `<iframe src="${embedUrl}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>`;
+
+                videoModal.style.display = 'block';
+            }
+
+            // 执行搜索
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                if (!searchTerm) {
+                    filteredAllResources = resources.filter(res => !res.recommended);
+                } else {
+                    filteredAllResources = resources.filter(res =>
+                        !res.recommended &&
+                        (
+                            res.title.toLowerCase().includes(searchTerm) ||
+                            res.description.toLowerCase().includes(searchTerm) ||
+                            res.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                        )
+                    );
+                }
+
+                renderAllResources();
+            }
+</script>
+</body>
+</html>
