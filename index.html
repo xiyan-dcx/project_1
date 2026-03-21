@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AI智能面试系统 | 简历提交平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', 'Inter', 'Noto Sans CJK SC', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f3ff 50%, #d4eaff 100%);
+            position: relative;
+            overflow-x: hidden;
+            padding: 20px 24px 40px;
+        }
+
+        /* ========= 浅色动态科技背景 (共用) ========= */
+        #light-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .grid-overlay-light {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(0, 120, 200, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 120, 200, 0.12) 1px, transparent 1px);
+            background-size: 45px 45px;
+            animation: gridMoveLight 25s linear infinite;
+        }
+
+        @keyframes gridMoveLight {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(45px, 45px); }
+        }
+
+        .light-particle {
+            position: absolute;
+            background: radial-gradient(circle, #4aa8ff, #7bc5ff);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatLightParticle 10s infinite ease-in-out;
+            box-shadow: 0 0 8px rgba(74, 168, 255, 0.5);
+        }
+
+        @keyframes floatLightParticle {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            15% { opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { opacity: 0; transform: translateY(-20vh) scale(1.1); }
+        }
+
+        .soft-glow {
+            position: absolute;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(74, 168, 255, 0.15), rgba(100, 180, 250, 0.02) 70%);
+            border-radius: 50%;
+            filter: blur(70px);
+            animation: glowFloat 16s infinite alternate;
+        }
+
+        @keyframes glowFloat {
+            0% { transform: translate(5%, 10%) scale(1); opacity: 0.4; }
+            100% { transform: translate(-3%, -8%) scale(1.2); opacity: 0.7; }
+        }
+
+        .tech-icon {
+            position: absolute;
+            font-size: 22px;
+            opacity: 0.2;
+            animation: rotateIconLight 35s linear infinite;
+            pointer-events: none;
+            color: #2c7ec9;
+        }
+
+        @keyframes rotateIconLight {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 顶部导航栏 - 双标签 */
+        .nav-tabs {
+            position: relative;
+            z-index: 20;
+            max-width: 1200px;
+            margin: 0 auto 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 10px 28px;
+            border: 1px solid rgba(74, 168, 255, 0.35);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 8px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #3a6b92;
+            letter-spacing: 1px;
+        }
+        .tab-btn:hover {
+            background: rgba(74, 168, 255, 0.2);
+            color: #1e6bb0;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: linear-gradient(125deg, #3f8fd9, #6aa9e6);
+            color: white;
+            box-shadow: 0 4px 12px rgba(63, 143, 217, 0.3);
+        }
+
+        /* 主容器 - 切换内容 */
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .page.active-page {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========= 页面1: 面试系统样式 (原第一份) ========= */
+        .interview-header {
+            text-align: center;
+            margin-bottom: 35px;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 60px;
+            padding: 20px 28px;
+            border: 1px solid rgba(74, 168, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 100, 150, 0.08);
+        }
+        .interview-header h1 {
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #1a6bb0, #3f8fd9, #6aa9e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .interview-header p {
+            color: #3a6b92;
+            margin-top: 10px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 45px;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            border-radius: 40px;
+            border: 1px solid rgba(63, 158, 255, 0.35);
+            padding: 28px 24px;
+            transition: 0.25s;
+            text-align: center;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #3f9eff;
+            box-shadow: 0 20px 30px rgba(0, 120, 200, 0.1);
+        }
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #1a6bb0;
+        }
+        .feature-card p {
+            color: #2c6288;
+            line-height: 1.5;
+        }
+        .visual-section {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 28px 32px;
+            border: 1px solid rgba(74, 168, 255, 0.4);
+            margin-top: 20px;
+        }
+        .visual-section h2 {
+            font-size: 1.8rem;
+            color: #1e5a8a;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .bars-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .bar-item {
+            margin-bottom: 20px;
+        }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: #1e5a8a;
+            font-weight: 500;
+        }
+        .bar-bg {
+            background: rgba(63, 158, 255, 0.2);
+            border-radius: 20px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            background: linear-gradient(90deg, #3f9eff, #7bc5ff);
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.75rem;
+            color: #6a8fb1;
+        }
+
+        /* ========= 页面2: 简历提交样式 (原第二份, 适配容器) ========= */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 35px;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 60px;
+            padding: 24px 28px;
+            border: 1px solid rgba(74, 168, 255, 0.3);
+        }
+        .hero-section h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #1a6bb0, #3f8fd9, #6aa9e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-section p {
+            color: #3a6b92;
+            margin-top: 10px;
+        }
+        .form-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            border: 1px solid rgba(74, 168, 255, 0.4);
+            padding: 32px 30px;
+            margin-bottom: 40px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px 28px;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group label {
+            color: #1e5a8a;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-group input, .input-group select, .input-group textarea {
+            background: white;
+            border: 1.5px solid #cde5f5;
+            border-radius: 28px;
+            padding: 12px 20px;
+            color: #1a3a55;
+            outline: none;
+        }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: #4a9eff;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+        }
+        .uni-wrapper {
+            position: relative;
+        }
+        .uni-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #7bb5e0;
+            border-radius: 24px;
+            max-height: 260px;
+            overflow-y: auto;
+            z-index: 200;
+            display: none;
+            margin-top: 8px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+        }
+        .uni-dropdown div {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #2c6288;
+            border-bottom: 1px solid #e0f0ff;
+        }
+        .uni-dropdown div:hover {
+            background: #eef7ff;
+            color: #1a6bb0;
+        }
+        .error-msg {
+            color: #e86a6a;
+            font-size: 0.7rem;
+            margin-top: 6px;
+            padding-left: 16px;
+        }
+        .file-zone {
+            background: #f8fcff;
+            border: 1.5px dashed #6aa9e6;
+            border-radius: 40px;
+            padding: 16px 20px;
+            text-align: center;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 35px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            background: white;
+            border: 1.5px solid #7bb5e0;
+            color: #2c6288;
+            transition: 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(125deg, #3f8fd9, #6aa9e6);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 12px rgba(63, 143, 217, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        .btn-secondary:hover {
+            background: #eef7ff;
+        }
+        .resume-summary {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 28px 32px;
+            border: 1px solid rgba(74, 168, 255, 0.4);
+        }
+        .summary-title {
+            font-size: 1.9rem;
+            background: linear-gradient(120deg, #1a6bb0, #4a9eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-left: 5px solid #4a9eff;
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .preview-item-card {
+            background: #ffffffcc;
+            border-radius: 28px;
+            padding: 16px 20px;
+            border: 1px solid #cde5f5;
+        }
+        .preview-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #4a9eff;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .preview-value {
+            color: #1e4a76;
+            font-size: 0.95rem;
+        }
+        .full-width-preview {
+            grid-column: 1 / -1;
+        }
+        .footer-info {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.75rem;
+            color: #6a8fb1;
+        }
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+            .nav-tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="light-bg">
+    <div class="grid-overlay-light"></div>
+    <div class="soft-glow" style="top: -15%; left: -10%;"></div>
+    <div class="soft-glow" style="bottom: -20%; right: -5%; width: 60vw; height: 60vw; animation-duration: 20s;"></div>
+    <div id="particleContainerLight"></div>
+    <div class="tech-icon" style="top: 12%; left: 88%;">⚡</div>
+    <div class="tech-icon" style="bottom: 15%; left: 5%;">💠</div>
+    <div class="tech-icon" style="top: 50%; left: 93%;">◈</div>
+    <div class="tech-icon" style="top: 75%; left: 12%;">✦</div>
+</div>
+
+<!-- 顶部双标签 -->
+<div class="nav-tabs">
+    <button class="tab-btn active" id="tabInterview">🏠 首页</button>
+    <button class="tab-btn" id="TabResume">📄 个人简历提交</button>
+</div>
+
+<div class="page-container">
+    <!-- 页面1: AI面试系统首页 -->
+    <div id="interviewPage" class="page active-page">
+        <div class="interview-header">
+            <h1>🤖 AI智能面试系统 · 多模态评估</h1>
+            <p>融合语音、表情与语义分析，让招聘更高效客观</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🎥 多模态分析</h3>
+                <p>融合个人经历、兴趣评估，多维度评价候选人表现，捕捉微表情与语调特征。</p>
+            </div>
+            <div class="feature-card">
+                <h3>🧠 AI智能测评</h3>
+                <p>基于NLP与模型评分，自动生成结构化面试评价，提供深度洞察。</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 能力可视化</h3>
+                <p>用图表直观呈现候选人能力分布，辅助科学决策，驱动人才选拔。</p>
+            </div>
+        </div>
+
+        <div class="visual-section">
+            <h2>能力评估示例</h2>
+            <div class="bars-container" id="demoBars">
+                <div class="bar-item"><div class="bar-label"><span>专业知识</span><span id="demo1">82%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 82%;"></div></div></div>
+                <div class="bar-item"><div class="bar-label"><span>技能匹配</span><span id="demo2">88%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 88%;"></div></div></div>
+                <div class="bar-item"><div class="bar-label"><span>语言表达</span><span id="demo3">80%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div></div>
+                <div class="bar-item"><div class="bar-label"><span>逻辑思维</span><span id="demo4">74%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 74%;"></div></div></div>
+                <div class="bar-item"><div class="bar-label"><span>应变能力</span><span id="demo5">74%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 74%;"></div></div></div>
+                <div class="bar-item"><div class="bar-label"><span>创新能力</span><span id="demo6">74%</span></div><div class="bar-bg"><div class="bar-fill" style="width: 74%;"></div></div></div>
+            </div>
+        </div>
+        <div class="footer-note">© 2026 新大陆杯计算机程序设计大赛 · 全世界最忧郁之队 | AI面试系统</div>
+    </div>
+
+    <!-- 页面2: 个人简历提交 (原第二份完整) -->
+    <div id="resumePage" class="page">
+        <div class="hero-section">
+            <h1>✨ 轻云 · 智能简历引擎 ✨</h1>
+            <p>浅色科技风 | 实时预览 | 院校动态检索 | 一键提交</p>
+        </div>
+
+        <div class="form-card">
+            <form id="resumeForm" onsubmit="return false;">
+                <div class="form-grid">
+                    <div class="input-group"><label>👤 姓名</label><input type="text" id="fullname" placeholder="请输入姓名"></div>
+                    <div class="input-group"><label>📱 手机号码</label><input type="tel" id="phone" placeholder="11位手机号"><div id="phoneError" class="error-msg"></div></div>
+                    <div class="input-group"><label>📧 电子邮箱</label><input type="email" id="email" placeholder="your@email.com"><div id="emailError" class="error-msg"></div></div>
+                    <div class="input-group"><label>🎓 最高学历</label><select id="education"><option value="大专">大专</option><option value="本科" selected>本科</option><option value="研究生">研究生</option></select></div>
+                    <div class="input-group"><label>🏛️ 毕业院校</label><div class="uni-wrapper"><input type="text" id="universityInput" placeholder="输入或选择大学，支持实时检索"><div id="universityDropdown" class="uni-dropdown"></div></div></div>
+                    <div class="input-group"><label>📖 专业</label><input type="text" id="major" placeholder="计算机科学与技术"></div>
+                    <div class="input-group full-width"><label>💼 工作经验</label><textarea id="workExp" rows="2" placeholder="请描述您的工作经历..."></textarea></div>
+                    <div class="input-group full-width"><label>⚙️ 专业技能</label><textarea id="techSkills" rows="2" placeholder="JavaScript, React, Python..."></textarea></div>
+                    <div class="input-group full-width"><label>✨ 个人技能 / 软实力</label><textarea id="personalSkills" rows="2" placeholder="团队协作、创新思维..."></textarea></div>
+                    <div class="input-group full-width"><div class="file-zone"><label>📎 上传个人简历文件（PDF/DOC）</label><input type="file" id="resumeFile" accept=".pdf,.doc,.docx"></div></div>
+                </div>
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-secondary" id="resBackHomeBtn">🏠 返回首页</button>
+                    <button type="button" class="btn btn-primary" id="submitResumeBtn">🚀 提交简历</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="resume-summary">
+            <div class="summary-title"><span>📋 简历实时预览</span><span style="font-size:0.85rem; color:#4a9eff;">动态同步</span></div>
+            <div id="livePreviewContainer" class="preview-grid"></div>
+            <div class="footer-info">※ 所有信息实时更新 | 院校库支持模糊检索 + 滚动加载更多</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------------------------- 页面切换逻辑 ----------------------------
+    const tabInterview = document.getElementById('tabInterview');
+    const tabResume = document.getElementById('TabResume');
+    const interviewPage = document.getElementById('interviewPage');
+    const resumePage = document.getElementById('resumePage');
+
+    function switchToInterview() {
+        interviewPage.classList.add('active-page');
+        resumePage.classList.remove('active-page');
+        tabInterview.classList.add('active');
+        tabResume.classList.remove('active');
+    }
+    function switchToResume() {
+        resumePage.classList.add('active-page');
+        interviewPage.classList.remove('active-page');
+        tabResume.classList.add('active');
+        tabInterview.classList.remove('active');
+        // 每次切回简历页时刷新预览与院校下拉
+        if (typeof updatePreviewCard === 'function') updatePreviewCard();
+    }
+    tabInterview.addEventListener('click', switchToInterview);
+    tabResume.addEventListener('click', switchToResume);
+
+    // 简历页内部 “返回首页” 按钮: 切换到首页
+    const resBackBtn = document.getElementById('resBackHomeBtn');
+    if (resBackBtn) {
+        resBackBtn.addEventListener('click', () => {
+            switchToInterview();
+        });
+    }
+
+    // ---------------------------- 简历页面完整逻辑 (大学库+表单+预览) ----------------------------
+    const universityMaster = [
+        "北京大学", "清华大学", "复旦大学", "上海交通大学", "浙江大学", "中国科学技术大学", "南京大学", "西安交通大学", "哈尔滨工业大学",
+        "武汉大学", "华中科技大学", "中山大学", "四川大学", "南开大学", "天津大学", "山东大学", "东南大学", "吉林大学", "厦门大学",
+        "同济大学", "北京师范大学", "国防科技大学", "中国人民大学", "兰州大学", "西北工业大学", "东北大学", "重庆大学", "大连理工大学",
+        "西北农林科技大学", "中央民族大学", "电子科技大学", "湖南大学", "中南大学", "华南理工大学", "北京航空航天大学", "北京理工大学",
+        "中国农业大学", "郑州大学", "云南大学", "新疆大学", "上海大学", "苏州大学", "南京航空航天大学", "南京理工大学", "河海大学",
+        "江南大学", "中国矿业大学", "中国药科大学", "合肥工业大学", "安徽大学", "福州大学", "南昌大学", "中国石油大学", "中国地质大学",
+        "中国海洋大学", "北京邮电大学", "北京交通大学", "北京科技大学", "北京化工大学", "北京林业大学", "华北电力大学", "天津医科大学",
+        "河北工业大学", "太原理工大学", "内蒙古大学", "辽宁大学", "大连海事大学", "延边大学", "东北师范大学", "哈尔滨工程大学", "东北农业大学",
+        "东北林业大学", "华东理工大学", "东华大学", "上海外国语大学", "上海财经大学", "南京师范大学", "浙江工业大学", "浙江工商大学",
+        "安徽师范大学", "华侨大学", "福建师范大学", "山东师范大学", "青岛大学", "河南大学", "湖北大学", "中南财经政法大学", "湖南师范大学",
+        "华南师范大学", "暨南大学", "广西大学", "西南大学", "西南交通大学", "西南财经大学", "贵州大学", "西北大学", "西安电子科技大学",
+        "长安大学", "陕西师范大学", "青海大学", "宁夏大学", "石河子大学", "广州大学", "深圳大学", "汕头大学", "宁波大学", "杭州电子科技大学",
+        "重庆邮电大学", "南京邮电大学", "燕山大学", "河北大学", "山西大学", "中北大学", "东北财经大学", "南京信息工程大学", "浙江理工大学",
+        "长沙理工大学", "昆明理工大学", "江西财经大学", "西南政法大学", "华东政法大学"
+    ];
+    const sortedUniversities = [...new Map(universityMaster.map(u => [u, u])).values()].sort((a,b) => a.localeCompare(b, 'zh'));
+    
+    const fullname = document.getElementById('fullname');
+    const phoneInput = document.getElementById('phone');
+    const emailInput = document.getElementById('email');
+    const educationSelect = document.getElementById('education');
+    const universityInput = document.getElementById('universityInput');
+    const majorInput = document.getElementById('major');
+    const workExp = document.getElementById('workExp');
+    const techSkills = document.getElementById('techSkills');
+    const personalSkills = document.getElementById('personalSkills');
+    const fileInput = document.getElementById('resumeFile');
+    const phoneErrorDiv = document.getElementById('phoneError');
+    const emailErrorDiv = document.getElementById('emailError');
+    const previewContainer = document.getElementById('livePreviewContainer');
+    const dropdownDiv = document.getElementById('universityDropdown');
+    let currentFiltered = [...sortedUniversities];
+    let visibleLimit = 6;
+
+    function renderUniversityDropdown(filteredList) {
+        if (!dropdownDiv) return;
+        if (filteredList.length === 0) { dropdownDiv.style.display = "none"; return; }
+        const toShow = filteredList.slice(0, visibleLimit);
+        dropdownDiv.innerHTML = "";
+        toShow.forEach(uni => {
+            const div = document.createElement('div');
+            div.textContent = uni;
+            div.addEventListener('click', (e) => {
+                universityInput.value = uni;
+                dropdownDiv.style.display = "none";
+                updatePreviewCard();
+                e.stopPropagation();
+            });
+            dropdownDiv.appendChild(div);
+        });
+        if (filteredList.length > visibleLimit) {
+            const moreTip = document.createElement('div');
+            moreTip.textContent = `⋯ 滚动加载更多 (共${filteredList.length}所) ⋯`;
+            moreTip.style.fontSize = "0.7rem";
+            moreTip.style.pointerEvents = "none";
+            dropdownDiv.appendChild(moreTip);
+        }
+        dropdownDiv.style.display = "block";
+    }
+    function filterUniByKeyword(keyword) {
+        if (!keyword.trim()) return [...sortedUniversities];
+        return sortedUniversities.filter(uni => uni.toLowerCase().includes(keyword.toLowerCase()));
+    }
+    function onUniversityInputChange() {
+        const kw = universityInput.value;
+        currentFiltered = filterUniByKeyword(kw);
+        visibleLimit = 6;
+        if (currentFiltered.length > 0) renderUniversityDropdown(currentFiltered);
+        else dropdownDiv.style.display = "none";
+        updatePreviewCard();
+    }
+    universityInput.addEventListener('input', onUniversityInputChange);
+    universityInput.addEventListener('focus', () => {
+        if (dropdownDiv.style.display !== "block") {
+            currentFiltered = filterUniByKeyword(universityInput.value);
+            visibleLimit = 6;
+            renderUniversityDropdown(currentFiltered);
+        }
+    });
+    document.addEventListener('click', (e) => {
+        if (!universityInput?.contains(e.target) && !dropdownDiv?.contains(e.target)) {
+            if(dropdownDiv) dropdownDiv.style.display = "none";
+        }
+    });
+    if (dropdownDiv) {
+        dropdownDiv.addEventListener('scroll', () => {
+            const { scrollTop, scrollHeight, clientHeight } = dropdownDiv;
+            if (scrollTop + clientHeight >= scrollHeight - 8) {
+                if (visibleLimit < currentFiltered.length) {
+                    visibleLimit = Math.min(visibleLimit + 6, currentFiltered.length);
+                    renderUniversityDropdown(currentFiltered);
+                }
+            }
+        });
+    }
+    function validatePhone(phone) { return /^1[0-9]{10}$/.test(phone); }
+    function validateEmail(email) { return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email); }
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+    function updatePreviewCard() {
+        const nameVal = fullname?.value.trim() || "未填写";
+        const phoneVal = phoneInput?.value.trim() || "";
+        const emailVal = emailInput?.value.trim() || "";
+        const eduVal = educationSelect?.value || "本科";
+        const uniVal = universityInput?.value.trim() || "未填写";
+        const majorVal = majorInput?.value.trim() || "未填写";
+        const workVal = workExp?.value.trim() || "无";
+        const techVal = techSkills?.value.trim() || "无";
+        const personalVal = personalSkills?.value.trim() || "无";
+        let fileStatus = "未上传简历文件";
+        if (fileInput?.files.length > 0) fileStatus = `📄 ${fileInput.files[0].name}`;
+        let phoneValid = true, emailValid = true;
+        if (phoneVal) phoneValid = validatePhone(phoneVal);
+        if (emailVal) emailValid = validateEmail(emailVal);
+        if(phoneErrorDiv) phoneErrorDiv.innerText = (phoneVal && !phoneValid) ? "❌ 手机号需11位数字且以1开头" : "";
+        if(emailErrorDiv) emailErrorDiv.innerText = (emailVal && !emailValid) ? "❌ 邮箱格式不正确" : "";
+        const contactStr = (phoneVal ? (phoneValid ? phoneVal : phoneVal + " 格式错误") : "未填写") + (emailVal ? " / " + (emailValid ? emailVal : emailVal + " 格式错误") : "");
+        if(previewContainer) {
+            previewContainer.innerHTML = `
+                <div class="preview-item-card"><div class="preview-label">🌟 姓名</div><div class="preview-value">${escapeHtml(nameVal)}</div></div>
+                <div class="preview-item-card"><div class="preview-label">📞 联系方式</div><div class="preview-value">${escapeHtml(contactStr)}</div></div>
+                <div class="preview-item-card"><div class="preview-label">📧 邮箱</div><div class="preview-value">${escapeHtml(emailVal || "未填写")}</div></div>
+                <div class="preview-item-card"><div class="preview-label">🎓 学历</div><div class="preview-value">${escapeHtml(eduVal)}</div></div>
+                <div class="preview-item-card"><div class="preview-label">🏛️ 毕业院校</div><div class="preview-value">${escapeHtml(uniVal)}</div></div>
+                <div class="preview-item-card"><div class="preview-label">📘 专业</div><div class="preview-value">${escapeHtml(majorVal)}</div></div>
+                <div class="preview-item-card full-width-preview"><div class="preview-label">💼 工作经验</div><div class="preview-value">${escapeHtml(workVal)}</div></div>
+                <div class="preview-item-card full-width-preview"><div class="preview-label">⚙️ 专业技能</div><div class="preview-value">${escapeHtml(techVal)}</div></div>
+                <div class="preview-item-card full-width-preview"><div class="preview-label">✨ 个人技能</div><div class="preview-value">${escapeHtml(personalVal)}</div></div>
+                <div class="preview-item-card full-width-preview"><div class="preview-label">📎 附件简历</div><div class="preview-value">${escapeHtml(fileStatus)}</div></div>
+            `;
+        }
+    }
+    const allResumeFields = [fullname, phoneInput, emailInput, educationSelect, universityInput, majorInput, workExp, techSkills, personalSkills, fileInput];
+    allResumeFields.forEach(field => {
+        if(field) field.addEventListener('input', updatePreviewCard);
+        if(field === fileInput) field.addEventListener('change', updatePreviewCard);
+    });
+    const submitResume = document.getElementById('submitResumeBtn');
+    if(submitResume) {
+        submitResume.addEventListener('click', () => {
+            const phone = phoneInput?.value.trim() || "";
+            const email = emailInput?.value.trim() || "";
+            let hasErr = false;
+            if (phone && !validatePhone(phone)) { if(phoneErrorDiv) phoneErrorDiv.innerText = "手机号码格式不正确"; hasErr = true; }
+            if (email && !validateEmail(email)) { if(emailErrorDiv) emailErrorDiv.innerText = "邮箱格式无效"; hasErr = true; }
+            if (fileInput?.files.length === 0) { alert("请上传个人简历文件 (PDF/DOC)"); hasErr = true; }
+            if (hasErr) return;
+            alert("✅ 简历提交成功！HR 将会尽快与您联系~");
+        });
+    }
+    // 初始化预览与下拉
+    if (typeof updatePreviewCard === 'function') updatePreviewCard();
+    currentFiltered = [...sortedUniversities];
+    visibleLimit = 6;
+
+    // 动态粒子背景
+    function createLightParticles() {
+        const container = document.getElementById('particleContainerLight');
+        if (!container) return;
+        for (let i = 0; i < 55; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('light-particle');
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 12 + 's';
+            particle.style.animationDuration = 7 + Math.random() * 12 + 's';
+            container.appendChild(particle);
+        }
+    }
+    createLightParticles();
+</script>
+</body>
+</html>
