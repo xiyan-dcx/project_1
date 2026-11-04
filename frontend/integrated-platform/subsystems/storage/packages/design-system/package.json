@@ -1,0 +1,1 @@
+{"name":"@research-platform/design-system","version":"0.1.0","private":true,"type":"module","exports":{".":"./index.ts","./styles":"./styles/index.css","./theme":"./theme.ts","./charts":"./chart-theme.ts"},"dependencies":{"class-variance-authority":"0.7.1","clsx":"2.1.1"},"peerDependencies":{"vue":"^3.5.0"}}

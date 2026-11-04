@@ -1,0 +1,56 @@
+/* SnowAPI light theme. Tokens are scoped to this subsystem, including portal pages. */
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/PublicSans-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/PublicSans-Medium.ttf') format('truetype');
+}
+.sd-root {
+  --sd-background: oklch(1 0 0);
+  --sd-foreground: oklch(0.20 0 0);
+  --sd-panel: oklch(0.975 0 0);
+  --sd-inset: oklch(1 0 0);
+  --sd-muted: oklch(0.945 0 0);
+  --sd-secondary: oklch(0.46 0 0);
+  --sd-primary: oklch(0.20 0 0);
+  --sd-on-primary: oklch(1 0 0);
+  --sd-border: color-mix(in oklab, var(--sd-foreground) 10%, transparent);
+  --sd-focus: color-mix(in oklab, var(--sd-primary) 50%, transparent);
+  --sd-success: oklch(0.40 0.09 163);
+  --sd-warning: oklch(0.43 0.09 70);
+  --sd-danger: oklch(0.46 0.16 27);
+  --sd-info: oklch(0.43 0.13 250);
+  --sd-cpu: oklch(0.49 0.14 250);
+  --sd-memory: oklch(0.45 0.08 200);
+  --sd-selected: color-mix(in oklch, var(--sd-info) 8%, var(--sd-inset));
+  --sd-success-soft: color-mix(in oklch, var(--sd-success) 9%, var(--sd-inset));
+  --sd-warning-soft: color-mix(in oklch, var(--sd-warning) 10%, var(--sd-inset));
+  --sd-danger-soft: color-mix(in oklch, var(--sd-danger) 8%, var(--sd-inset));
+  --sd-flight-background: oklch(0.92 0.045 235);
+  --sd-flight-foreground: oklch(0.24 0.035 250);
+  --sd-flight-secondary: oklch(0.40 0.06 245);
+  --sd-flight-accent: oklch(0.55 0.14 235);
+  --sd-font-body: 'Public Sans', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --sd-font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --sd-radius: 10px;
+  --sd-radius-inner: 6px;
+  --sd-radius-button: 8px;
+  --sd-space-1: 4px;
+  --sd-space-2: 8px;
+  --sd-space-3: 12px;
+  --sd-space-4: 16px;
+  --sd-space-6: 24px;
+  --sd-duration-fast: 180ms;
+  --sd-duration-normal: 240ms;
+  --sd-duration-slow: 320ms;
+  --sd-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --sd-floating-shadow: 0 8px 24px color-mix(in oklab, var(--sd-foreground) 12%, transparent);
+}

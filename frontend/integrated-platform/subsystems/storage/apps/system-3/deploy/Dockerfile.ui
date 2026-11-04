@@ -1,0 +1,11 @@
+# Offline build: reuse the already verified local Python/FastAPI image as a
+# static-file server and narrow reverse proxy. The original API code is not run.
+FROM scalaafa/dashboard:v18-backend-detect
+WORKDIR /app
+USER root
+COPY apps/system-3/dist/ /app/dist/
+COPY apps/system-3/deploy/ui_server.py /app/ui_server.py
+RUN chmod -R a+rX /app/dist
+USER 1017:0
+EXPOSE 8000
+CMD ["uvicorn", "ui_server:app", "--host", "0.0.0.0", "--port", "8000"]

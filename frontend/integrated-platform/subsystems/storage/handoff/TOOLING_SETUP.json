@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-27T17:54:29.992576+08:00",
+  "node_executable": "/usr/bin/node",
+  "pnpm_version": "10.34.9",
+  "pnpm_path": "/home/p3-02/.local/bin/pnpm",
+  "pnpm_tarball_sha256": "7e8a946108e7baab119e51d27c24d6178b46545422643dbc91e34e2f1ee32e0f",
+  "registry": "https://registry.npmjs.org/pnpm",
+  "dependency_install_started": true,
+  "dependency_install_exit_code": 0
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-portal/
+dist-portal-config/
+.venv/
+__pycache__/
+.local/
+*.log
+*.pyc
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+review/

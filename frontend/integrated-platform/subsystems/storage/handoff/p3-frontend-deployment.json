@@ -1,0 +1,147 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "scalaafa-frontend-p3",
+    "namespace": "scalaafa-platform",
+    "labels": {
+      "app": "scalaafa-frontend-p3"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "strategy": {
+      "type": "Recreate"
+    },
+    "selector": {
+      "matchLabels": {
+        "app": "scalaafa-frontend-p3"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "scalaafa-frontend-p3"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "njupt-p3-2"
+        },
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "runAsUser": 1000,
+          "runAsGroup": 1000,
+          "runAsNonRoot": true
+        },
+        "containers": [
+          {
+            "name": "frontend",
+            "image": "docker.io/scalaafa/caas-lsm-runtime:v4-loadaware",
+            "imagePullPolicy": "Never",
+            "workingDir": "/home/p3-02/Storage separation/scalaafa-frontend/apps/system-3",
+            "command": [
+              "/usr/bin/node",
+              "/home/p3-02/Storage separation/scalaafa-frontend/apps/system-3/node_modules/vite/bin/vite.js",
+              "--host",
+              "0.0.0.0",
+              "--port",
+              "5174",
+              "--strictPort"
+            ],
+            "env": [
+              {
+                "name": "HOME",
+                "value": "/home/p3-02"
+              },
+              {
+                "name": "SYSTEM3_API_TARGET",
+                "value": "http://dashboard-caas.scalaafa-platform.svc.cluster.local:8000"
+              }
+            ],
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 5174,
+                "hostPort": 5174,
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/system-3/",
+                "port": "http"
+              },
+              "initialDelaySeconds": 2,
+              "periodSeconds": 5,
+              "timeoutSeconds": 3
+            },
+            "livenessProbe": {
+              "tcpSocket": {
+                "port": "http"
+              },
+              "initialDelaySeconds": 20,
+              "periodSeconds": 15
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            },
+            "resources": {
+              "requests": {
+                "cpu": "50m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "1",
+                "memory": "768Mi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "project",
+                "mountPath": "/home/p3-02/Storage separation/scalaafa-frontend"
+              },
+              {
+                "name": "node",
+                "mountPath": "/usr/bin/node",
+                "readOnly": true
+              },
+              {
+                "name": "tmp",
+                "mountPath": "/tmp"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "project",
+            "hostPath": {
+              "path": "/home/p3-02/Storage separation/scalaafa-frontend",
+              "type": "Directory"
+            }
+          },
+          {
+            "name": "node",
+            "hostPath": {
+              "path": "/usr/bin/node",
+              "type": "File"
+            }
+          },
+          {
+            "name": "tmp",
+            "emptyDir": {
+              "sizeLimit": "128Mi"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

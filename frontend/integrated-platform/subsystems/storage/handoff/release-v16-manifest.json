@@ -1,0 +1,186 @@
+{
+  "files": {
+    "dist/index.html": "d85261d669f56a906fdca51d94acc058f2a3596bbaae2986ac247938826f0cb4",
+    "dist/assets/BenchmarkView-CNeXVyMa.js": "e7ba46375dd3139690f7243d7ba776dc0c2ad1769f276918d520dcaad16992ab",
+    "dist/assets/ComparisonView-C3P8ulQo.js": "6f8ea9f491498c34d6abb62c84ec21561b3929137c380a5415fb62c90d963ba9",
+    "dist/assets/echarts-3bpXgXl_.js": "42e9d80ee621132ae4edf917ba947aef2340dc2cbca3fea3b81381f7d7fe9236",
+    "dist/assets/endpoints-BvWGmDVU.js": "8669e15aa076ec0dd4d378ae9c7f65d3a5e5575f997e26703335b441fa0efe50",
+    "dist/assets/FullStackView-D6ikjELr.js": "dadab9c48883009a004bb118cddf4b78a5aa7f2ff3377321a390c04c220dbae0",
+    "dist/assets/FullStackView-DmadBw3r.css": "bb0a12b42339057804b49b7c6db39e7341e8bd4efb3b1b5c9a1eeb9dbcf214ca",
+    "dist/assets/index-BmGHMqnj.js": "a8056d7aab1bb55dba1cde46a0490cb9f7d1f3e37e5cd78e8777681eef6b80c6",
+    "dist/assets/index-D7kmJGdL.css": "2ecf0ceedb6c710b2a0d81ab2adbf7c6f5e2ed52520059b687c15720391092fd",
+    "dist/assets/MetricChart.vue_vue_type_script_setup_true_lang-BMa7o3oK.js": "0f8ede4b48a05616458ec20a4dc4ec25205e59ef40e95da73e62f5d5af6adc09",
+    "dist/assets/PageLayout.vue_vue_type_script_setup_true_lang-ANXNj0qp.js": "8d12a7afb5fd2c0090180928aba2e38c65151cb6c8bddc203fb50f1c0b865276",
+    "dist/assets/PublicSans-C_1_ajHm.ttf": "d75a7dc1a27eb9e336d5b33f55489d2ecb5621bf694d5c43b2415bce2ca830a8",
+    "dist/assets/zrender-B5v71n3v.js": "048ec8876a16ee85ab0bdfcd38b0819caf516238e18c1760c119f1a9aadbecb5",
+    "source/apps/system-3/package.json": "19ef8960ed766fb26817b69947083368e118cb262ad2ba134f3a7e99dc4aff1a",
+    "source/pnpm-lock.yaml": "7005c95094113561a8b5e2d1e5de6bcabd4232455c6728edf15f026305dbe24d",
+    "source/apps/system-3/src/App.vue": "da64607709bea80069e5c84fd79598942f9275f94cb85d635e98cb1687d834f1",
+    "source/apps/system-3/src/main.ts": "b48f90b553abf7b2dd2650a0697a63cb6009073fb959cb59e5b489e338365642",
+    "source/apps/system-3/src/assets/fusion.css": "7a7cc8767ceba17aae620fbb3a00ad98bdcadaabe5f26477d299b7dbcdbe0f7a",
+    "source/apps/system-3/src/assets/styles.css": "44b41f17f11d7522df73a1fb83cb376b7e12d137891d55e96eca3ed99edc1ed3",
+    "source/apps/system-3/src/components/CaaSComparison.vue": "18a4c2dfcedb02166e6adde559eece4aa4bc69e41f30a64d22a855dbf8d81999",
+    "source/apps/system-3/src/components/MetricChart.vue": "2aa744e8c201fefb3a868fe9a9e99d41ced698256c6c066e65feff877f09e245",
+    "source/apps/system-3/src/domain/dashboard.ts": "8fdad3c712d412dfab16ae05ce76c59a5139c17d5cafc198b9e5c63b111e6fa1",
+    "source/apps/system-3/src/views/BenchmarkView.vue": "d2a27c32f922e2eeefa467586de392b06dfbf0ed7699ffeb4972fdf52ad96bfc",
+    "source/apps/system-3/src/views/ComparisonView.vue": "7d27ab8e5ef3725702b673738400a3a12225fac07377e6013bcbd22bb4101eae",
+    "source/apps/system-3/src/views/FullStackView.vue": "fe69e5ca21aec8bbe5040a9aab94dab59b4a1542cf7456e3996c434388cc2ee1",
+    "source/packages/design-system/chart-theme.ts": "501a7e5adab4ee84b6e0b9481ae680304f49ef408f16fdb635f426ac313d6897",
+    "source/packages/design-system/FONT-SOURCES.json": "7a50876122b0cd137a51af31a956e9b068d201e490ff0ae301b135a916e782ad",
+    "source/packages/design-system/index.ts": "9564e7ecbdd373e9708c6916af8f2001e16438a6a1b91b170fa25c8a24bcd921",
+    "source/packages/design-system/package.json": "12bceb1dcf64c18c208ae4fdd8fe9805b9162a6495062ef9211919d01b0fbed5",
+    "source/packages/design-system/README.md": "a1f2b785dcae4528ddd4d0bcc2c43ffc8a2c3b182281f809d38faefb4b91132d",
+    "source/packages/design-system/theme.ts": "cd9354af5a5a99745bed8fb19c602e16c0a45bffbe5329a7aeb97d4ca16ece76",
+    "source/packages/design-system/variants.ts": "54df14fad96594be061c62bb422ac13693d57c2380842d2285b29baae9444a07",
+    "source/packages/design-system/styles/base.css": "87a2b9e6c9aab20ff90f83c83ad86b027cfb17277586baec1deb8e843df4fe51",
+    "source/packages/design-system/styles/fonts.css": "93d60b3b13ea97654fbd711d1117062b556ceffc6fa0e88487e44a13326e9d9c",
+    "source/packages/design-system/styles/index.css": "8c0808e18f71f96dde6659abe901f38060460ec9d9bf6bcfa30b7b15cedf6378",
+    "source/packages/design-system/styles/motion.css": "ce7d921466ddc251ee80d013109adec158d949821488ef2fddde60ae30dc01fe",
+    "source/packages/design-system/styles/presets.css": "145c18551ebe8da4e62fbbef4a9f9c49e2eeb7034c7230bc18e96f0650490838",
+    "source/packages/design-system/styles/tokens.css": "70166452b1562b76ba9ba0a4a9519bf8c9680203c016c77a378f720498c7fadf",
+    "source/packages/design-system/vue/AppShell.vue": "1bc94795d6dadb95a36cb35a0995e27a43b1b997bf060b94977137ea82299498",
+    "source/packages/design-system/vue/Badge.vue": "23d38ec82786c15b4dc067f50f8ac7a74b98bd5b8b7b31d44d331150107b2501",
+    "source/packages/design-system/vue/Button.vue": "525cc02a5ec5e1430eb64a3a00db10c58fb0d0406f4a580a4099217ca5e861f9",
+    "source/packages/design-system/vue/Card.vue": "69ade22a35ab0ad722f8818439c68daa77d21e1644ba8ea5c91d3e5f7e709372",
+    "source/packages/design-system/vue/DataTable.vue": "f64a86dd186cdab4f6d07302afeff519e068a3aeaae9e227054ccb4501b15b7c",
+    "source/packages/design-system/vue/PageLayout.vue": "2964317075668d3ea61dfae1b52b129d23cc2d34da80e5b06fd101f3847f051e",
+    "source/packages/design-system/styles/fonts/OFL.txt": "157a9e77f7580246e97c769490e2e977ae94399f9d30f4556015c41fe8c28bac",
+    "source/packages/design-system/styles/fonts/PublicSans.ttf": "d75a7dc1a27eb9e336d5b33f55489d2ecb5621bf694d5c43b2415bce2ca830a8",
+    "Dockerfile": "edea1fc72da193a96c83703bf175513a3a7414896c6688ca77185d55d358a59d"
+  },
+  "source_changes": {
+    "apps/system-3/package.json": {
+      "before": "22f47092bd8bec49215b516222684fe258de93fd4989d0cc244da5cd392f50d1",
+      "after": "19ef8960ed766fb26817b69947083368e118cb262ad2ba134f3a7e99dc4aff1a"
+    },
+    "pnpm-lock.yaml": {
+      "before": "01152301f4ee93342fdaf0f52825852eb2e8099c738c910c14be0cb7c34631c2",
+      "after": "7005c95094113561a8b5e2d1e5de6bcabd4232455c6728edf15f026305dbe24d"
+    },
+    "apps/system-3/src/App.vue": {
+      "before": "dea029099fa29f058fa2760f4cc6e58f2412a7e615de7f4a4be1143aa784b574",
+      "after": "da64607709bea80069e5c84fd79598942f9275f94cb85d635e98cb1687d834f1"
+    },
+    "apps/system-3/src/main.ts": {
+      "before": "87497e0c7b8f87a11c293d762211bbb03a3192ed5d674d84e0739c3ff8ca7f6f",
+      "after": "b48f90b553abf7b2dd2650a0697a63cb6009073fb959cb59e5b489e338365642"
+    },
+    "apps/system-3/src/assets/fusion.css": {
+      "before": "8fe8dda163b027663a421b594e92f7f42ee61ac133d9856f4444b8449dc357db",
+      "after": "7a7cc8767ceba17aae620fbb3a00ad98bdcadaabe5f26477d299b7dbcdbe0f7a"
+    },
+    "apps/system-3/src/assets/styles.css": {
+      "before": "8b4cbf844fba1185d11a5f0788523dff2937d42a86e60157768b440d53e294f5",
+      "after": "44b41f17f11d7522df73a1fb83cb376b7e12d137891d55e96eca3ed99edc1ed3"
+    },
+    "apps/system-3/src/components/CaaSComparison.vue": {
+      "before": "8653995fbd3d6f185fc10f19f9c55ddd3b0a6748de31ea5994a69ee146af6977",
+      "after": "18a4c2dfcedb02166e6adde559eece4aa4bc69e41f30a64d22a855dbf8d81999"
+    },
+    "apps/system-3/src/components/MetricChart.vue": {
+      "before": "eca4987a8c78254fd1af405262413073dd660f69b340ce553311a18f857102cb",
+      "after": "2aa744e8c201fefb3a868fe9a9e99d41ced698256c6c066e65feff877f09e245"
+    },
+    "apps/system-3/src/domain/dashboard.ts": {
+      "before": "b2ed73cdda2333d785cc0d558d553f9710d1d8682e28c70b64730071266fa371",
+      "after": "8fdad3c712d412dfab16ae05ce76c59a5139c17d5cafc198b9e5c63b111e6fa1"
+    },
+    "apps/system-3/src/views/BenchmarkView.vue": {
+      "before": "83f4176441a43efdef87ed784f68f0da3513e6c7ebbfada6eac23534c2a04cb0",
+      "after": "d2a27c32f922e2eeefa467586de392b06dfbf0ed7699ffeb4972fdf52ad96bfc"
+    },
+    "apps/system-3/src/views/ComparisonView.vue": {
+      "before": "d7f1c7eb63f4deb7c8ac01c785c79833a754468257c1118ca0861125b381cdf0",
+      "after": "7d27ab8e5ef3725702b673738400a3a12225fac07377e6013bcbd22bb4101eae"
+    },
+    "apps/system-3/src/views/FullStackView.vue": {
+      "before": "179d87a35b492c633c16a484674597a6db7d7d684a420df8f4eb00c73a814555",
+      "after": "fe69e5ca21aec8bbe5040a9aab94dab59b4a1542cf7456e3996c434388cc2ee1"
+    },
+    "packages/design-system/chart-theme.ts": {
+      "before": null,
+      "after": "501a7e5adab4ee84b6e0b9481ae680304f49ef408f16fdb635f426ac313d6897"
+    },
+    "packages/design-system/FONT-SOURCES.json": {
+      "before": null,
+      "after": "7a50876122b0cd137a51af31a956e9b068d201e490ff0ae301b135a916e782ad"
+    },
+    "packages/design-system/index.ts": {
+      "before": null,
+      "after": "9564e7ecbdd373e9708c6916af8f2001e16438a6a1b91b170fa25c8a24bcd921"
+    },
+    "packages/design-system/package.json": {
+      "before": null,
+      "after": "12bceb1dcf64c18c208ae4fdd8fe9805b9162a6495062ef9211919d01b0fbed5"
+    },
+    "packages/design-system/README.md": {
+      "before": null,
+      "after": "a1f2b785dcae4528ddd4d0bcc2c43ffc8a2c3b182281f809d38faefb4b91132d"
+    },
+    "packages/design-system/theme.ts": {
+      "before": null,
+      "after": "cd9354af5a5a99745bed8fb19c602e16c0a45bffbe5329a7aeb97d4ca16ece76"
+    },
+    "packages/design-system/variants.ts": {
+      "before": null,
+      "after": "54df14fad96594be061c62bb422ac13693d57c2380842d2285b29baae9444a07"
+    },
+    "packages/design-system/styles/base.css": {
+      "before": null,
+      "after": "87a2b9e6c9aab20ff90f83c83ad86b027cfb17277586baec1deb8e843df4fe51"
+    },
+    "packages/design-system/styles/fonts.css": {
+      "before": null,
+      "after": "93d60b3b13ea97654fbd711d1117062b556ceffc6fa0e88487e44a13326e9d9c"
+    },
+    "packages/design-system/styles/index.css": {
+      "before": null,
+      "after": "8c0808e18f71f96dde6659abe901f38060460ec9d9bf6bcfa30b7b15cedf6378"
+    },
+    "packages/design-system/styles/motion.css": {
+      "before": null,
+      "after": "ce7d921466ddc251ee80d013109adec158d949821488ef2fddde60ae30dc01fe"
+    },
+    "packages/design-system/styles/presets.css": {
+      "before": null,
+      "after": "145c18551ebe8da4e62fbbef4a9f9c49e2eeb7034c7230bc18e96f0650490838"
+    },
+    "packages/design-system/styles/tokens.css": {
+      "before": null,
+      "after": "70166452b1562b76ba9ba0a4a9519bf8c9680203c016c77a378f720498c7fadf"
+    },
+    "packages/design-system/vue/AppShell.vue": {
+      "before": null,
+      "after": "1bc94795d6dadb95a36cb35a0995e27a43b1b997bf060b94977137ea82299498"
+    },
+    "packages/design-system/vue/Badge.vue": {
+      "before": null,
+      "after": "23d38ec82786c15b4dc067f50f8ac7a74b98bd5b8b7b31d44d331150107b2501"
+    },
+    "packages/design-system/vue/Button.vue": {
+      "before": null,
+      "after": "525cc02a5ec5e1430eb64a3a00db10c58fb0d0406f4a580a4099217ca5e861f9"
+    },
+    "packages/design-system/vue/Card.vue": {
+      "before": null,
+      "after": "69ade22a35ab0ad722f8818439c68daa77d21e1644ba8ea5c91d3e5f7e709372"
+    },
+    "packages/design-system/vue/DataTable.vue": {
+      "before": null,
+      "after": "f64a86dd186cdab4f6d07302afeff519e068a3aeaae9e227054ccb4501b15b7c"
+    },
+    "packages/design-system/vue/PageLayout.vue": {
+      "before": null,
+      "after": "2964317075668d3ea61dfae1b52b129d23cc2d34da80e5b06fd101f3847f051e"
+    },
+    "packages/design-system/styles/fonts/OFL.txt": {
+      "before": null,
+      "after": "157a9e77f7580246e97c769490e2e977ae94399f9d30f4556015c41fe8c28bac"
+    },
+    "packages/design-system/styles/fonts/PublicSans.ttf": {
+      "before": null,
+      "after": "d75a7dc1a27eb9e336d5b33f55489d2ecb5621bf694d5c43b2415bce2ca830a8"
+    }
+  },
+  "build_sha256": "3f6c632339711f4d1ee940dbd7de31515b99575beeccfd8d16b2634b8d6ebaa3"
+}

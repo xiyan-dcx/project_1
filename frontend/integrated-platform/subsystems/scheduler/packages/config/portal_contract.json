@@ -1,0 +1,9 @@
+{
+  "systemId": "scheduler-display",
+  "systemName": "调度算法可视化系统",
+  "pageBasePath": "/scheduler/",
+  "apiBasePath": "/scheduler/api/k8s",
+  "backendOrigin": "http://10.166.33.36:5173",
+  "backendApiPath": "/api/k8s",
+  "demoUrl": "http://10.166.33.36:5173/"
+}

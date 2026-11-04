@@ -1,0 +1,34 @@
+{
+  "name": "@research/scheduler-display",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:portal": "node scripts/build-portal.mjs",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "check:classes": "node scripts/check-classes.mjs",
+    "preview:review": "node scripts/preview-review.mjs"
+  },
+  "dependencies": {
+    "@research/config": "workspace:*",
+    "@research/styles": "workspace:*",
+    "@vueuse/core": "^15.0.0",
+    "lucide-vue-next": "^1.0.0",
+    "motion-v": "^2.4.4",
+    "vue": "^3.5.43",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.0",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.0",
+    "vite": "^6.4.0",
+    "vue-tsc": "^3.0.0"
+  }
+}

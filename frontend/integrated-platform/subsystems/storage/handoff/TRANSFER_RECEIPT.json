@@ -1,0 +1,13 @@
+{
+  "completed_at": "2026-10-27T17:46:26.156960+08:00",
+  "node": "njupt-p3-2",
+  "address": "10.166.33.36",
+  "path": "/home/p3-02/Storage separation/scalaafa-frontend",
+  "archive_sha256": "a36d6b181f7944283f1b8b75936c2ee11c9cc46441a80b25f39614dd4a21cfb7",
+  "verified_files": 117,
+  "uid": 1000,
+  "gid": 1000,
+  "static_index_exists": true,
+  "source_exists": true,
+  "shared_packages_exist": true
+}

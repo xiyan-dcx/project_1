@@ -1,0 +1,17 @@
+{
+  "name": "research-platform",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev:scheduler": "pnpm --filter @research/scheduler-display dev",
+    "build:scheduler": "pnpm --filter @research/scheduler-display build",
+    "build:scheduler:portal": "pnpm --filter @research/scheduler-display build:portal && pnpm nginx:portal",
+    "package:scheduler:portal": "pnpm build:scheduler:portal && python3 scripts/package-portal.py",
+    "check:classes": "pnpm --filter @research/scheduler-display check:classes",
+    "typecheck": "pnpm -r typecheck",
+    "nginx:upstream": "node packages/config/scripts/emit-nginx.mjs",
+    "nginx:portal": "node packages/config/scripts/emit-portal-nginx.mjs",
+    "preview:scheduler:review": "pnpm --filter @research/scheduler-display preview:review"
+  }
+}
