@@ -1,0 +1,2 @@
+FROM scalaafa/dashboard:v21-isolated-engines
+COPY dashboard_v1.py /app/dashboard_v1.py

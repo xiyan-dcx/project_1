@@ -1,0 +1,15 @@
+{
+  "name": "@research/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./system_config": {
+      "types": "./system_config.ts",
+      "default": "./system_config.ts"
+    }
+  },
+  "scripts": {
+    "emit-nginx": "node scripts/emit-nginx.mjs"
+  }
+}

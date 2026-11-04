@@ -1,0 +1,253 @@
+/* ============================================================================
+ * SnowAPI Design Tokens (Monochrome OKLCH + Surface Derivation + Rainflow Skin)
+ * Ported for OMS-vue (Vue 3 + Element Plus, zero Tailwind runtime dependency).
+ * ========================================================================== */
+
+:root {
+  --font-sans:
+    'Public Sans Variable', 'Public Sans', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+
+  --font-serif:
+    'Lora Variable', 'Lora', 'Source Serif Pro', 'Source Serif 4',
+    'Noto Serif SC', 'Noto Serif TC', 'Noto Serif JP', 'Noto Serif KR',
+    'Source Han Serif SC', 'Source Han Serif TC', 'Source Han Serif',
+    'Songti SC', 'STSong', 'STSongti-SC-Regular', 'PingFang SC', 'SimSun',
+    'NSimSun', '宋体', 'FangSong', '仿宋', 'KaiTi', '楷体', Georgia,
+    'Times New Roman', Cambria, 'Liberation Serif', serif;
+
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', monospace;
+
+  --font-body: var(--font-sans);
+
+  /* Radius scale: all derived from --radius */
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-4xl: 999px;
+
+  /* Fixed structural radii */
+  --radius-inner: 6px;
+  --radius-element: 8px;
+  --radius-container: 12px;
+  --radius-page: 12px;
+
+  /* Layout metrics */
+  --app-header-height: 3.5rem;
+  --app-sidebar-width: 14.75rem;
+  --max-content-width: 86rem;
+
+  /* Pure Monochrome OKLCH poles & surface derivations */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.975 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.145 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.965 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: color-mix(in oklch, var(--primary) 8%, var(--background));
+  --accent-foreground: oklch(0.145 0 0);
+
+  --destructive: oklch(0.22 0 0);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.28 0 0);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.42 0 0);
+  --warning-foreground: oklch(0.145 0 0);
+  --info: oklch(0.36 0 0);
+  --info-foreground: oklch(0.985 0 0);
+  --neutral: oklch(0.55 0 0);
+  --neutral-foreground: oklch(0.145 0 0);
+
+  --border: oklch(0.91 0 0);
+  --input: oklch(0.84 0 0);
+  --ring: oklch(0.42 0 0);
+
+  /* Monochrome chart ramp */
+  --chart-1: oklch(0.18 0 0);
+  --chart-2: oklch(0.36 0 0);
+  --chart-3: oklch(0.54 0 0);
+  --chart-4: oklch(0.68 0 0);
+  --chart-5: oklch(0.82 0 0);
+
+  /* Sidebar derivation */
+  --sidebar: color-mix(in oklch, var(--foreground) 1.5%, var(--background));
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.145 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: color-mix(in oklch, var(--foreground) 6%, var(--background));
+  --sidebar-accent-foreground: oklch(0.145 0 0);
+  --sidebar-border: color-mix(in oklch, var(--foreground) 8%, var(--background));
+  --sidebar-ring: oklch(0.42 0 0);
+
+  /* Rainflow 3-tier surfaces */
+  --rainflow-surface: oklch(0.968 0.002 95);
+  --rainflow-surface-strong: oklch(0.944 0.002 95);
+  --rainflow-surface-inset: oklch(0.997 0.001 95);
+  --rainflow-divider: color-mix(in oklab, var(--foreground) 8%, transparent);
+
+  /* Table tokens */
+  --table-row: var(--rainflow-surface-inset);
+  --table-header: var(--rainflow-surface-strong);
+  --table-header-hover: color-mix(in oklch, var(--foreground) 6%, var(--background));
+  --table-row-hover: color-mix(in oklch, var(--foreground) 3.5%, var(--rainflow-surface-inset));
+  --table-row-selected: color-mix(in oklch, var(--foreground) 6%, var(--rainflow-surface-inset));
+  --table-disabled: color-mix(in oklch, var(--foreground) 3%, var(--background));
+
+  /* Floating & Toast independent tokens */
+  --floating-surface: oklch(1 0 0);
+  --floating-ink: oklch(0.165 0 0);
+  --floating-muted: oklch(0.46 0 0);
+  --floating-hover: oklch(0.955 0.002 95);
+  --floating-border: oklch(0.905 0.002 95);
+  --floating-shadow: 0 12px 36px oklch(0 0 0 / 0.1);
+  --notice-surface: oklch(1 0 0);
+  --notice-ink: oklch(0.165 0 0);
+  --notice-error: oklch(0.32 0 0);
+  --notice-border: oklch(0.88 0.002 95);
+  --notice-shadow: 0 8px 28px oklch(0 0 0 / 0.11);
+
+  /* Semantic bridge aliases */
+  --color-background-body: var(--background);
+  --color-background-surface: var(--card);
+  --color-background-muted: var(--muted);
+  --color-neutral-surface: color-mix(in oklab, var(--foreground) 6%, transparent);
+  --color-overlay: color-mix(in oklab, var(--foreground) 42%, transparent);
+  --color-overlay-hover: color-mix(in oklab, var(--foreground) 4%, transparent);
+  --color-overlay-pressed: color-mix(in oklab, var(--foreground) 8%, transparent);
+
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted-foreground);
+  --color-text-disabled: color-mix(in oklab, var(--muted-foreground) 62%, transparent);
+
+  --color-border-subtle: var(--border);
+  --color-border-emphasized: var(--input);
+
+  /* Motion curves & durations (SnowAPI two-curve discipline, capped <= 150ms for state changes) */
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-medium: 200ms;
+  --duration-slow: 260ms;
+}
+
+/* Dark mode pole reversal: charcoal canvas + brighter elevated cards */
+.dark {
+  --background: oklch(0.205 0 0);
+  --foreground: oklch(0.965 0 0);
+  --card: oklch(0.255 0 0);
+  --card-foreground: oklch(0.965 0 0);
+  --popover: oklch(0.275 0 0);
+  --popover-foreground: oklch(0.965 0 0);
+  --primary: oklch(0.965 0 0);
+  --primary-foreground: oklch(0.165 0 0);
+  --secondary: oklch(0.305 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.285 0 0);
+  --muted-foreground: oklch(0.76 0 0);
+  --accent: color-mix(in oklch, var(--primary) 14%, var(--background));
+  --accent-foreground: oklch(0.985 0 0);
+
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 18%);
+  --ring: oklch(0.78 0 0);
+
+  --sidebar: oklch(0.185 0 0);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.965 0 0);
+  --sidebar-primary-foreground: oklch(0.165 0 0);
+  --sidebar-accent: color-mix(in oklch, var(--primary) 12%, var(--background));
+  --sidebar-accent-foreground: oklch(0.965 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+
+  --rainflow-surface: oklch(0.245 0 0);
+  --rainflow-surface-strong: oklch(0.29 0 0);
+  --rainflow-surface-inset: oklch(0.185 0 0);
+  --rainflow-divider: color-mix(in oklab, var(--foreground) 10%, transparent);
+
+  --floating-surface: oklch(0.245 0 0);
+  --floating-ink: oklch(0.96 0 0);
+  --floating-muted: oklch(0.74 0 0);
+  --floating-hover: oklch(0.3 0 0);
+  --floating-border: oklch(1 0 0 / 14%);
+  --floating-shadow: 0 18px 52px oklch(0 0 0 / 0.45);
+  --notice-surface: oklch(0.245 0 0);
+  --notice-ink: oklch(0.96 0 0);
+  --notice-error: oklch(0.86 0 0);
+  --notice-border: oklch(1 0 0 / 14%);
+  --notice-shadow: 0 12px 36px oklch(0 0 0 / 0.42);
+}
+
+/* Rainflow Console Skin (Default active on <body data-snowapi-console="true">) */
+body[data-snowapi-console='true'] {
+  --background: oklch(0.994 0.001 95);
+  --foreground: oklch(0.165 0 0);
+  --card: oklch(0.968 0.002 95);
+  --card-foreground: oklch(0.165 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.165 0 0);
+  --primary: oklch(0.165 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.952 0.002 95);
+  --secondary-foreground: oklch(0.165 0 0);
+  --muted: oklch(0.948 0.002 95);
+  --muted-foreground: oklch(0.445 0 0);
+  --accent: oklch(0.932 0.002 95);
+  --accent-foreground: oklch(0.165 0 0);
+  --border: oklch(0.905 0.002 95);
+  --input: oklch(0.855 0.002 95);
+  --ring: oklch(0.165 0 0);
+
+  --sidebar: oklch(0.982 0.002 95);
+  --sidebar-foreground: oklch(0.165 0 0);
+  --sidebar-primary: oklch(0.165 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.938 0.002 95);
+  --sidebar-accent-foreground: oklch(0.165 0 0);
+  --sidebar-border: oklch(0.918 0.002 95);
+  --sidebar-ring: oklch(0.165 0 0);
+
+  --rainflow-surface: oklch(0.968 0.002 95);
+  --rainflow-surface-strong: oklch(0.944 0.002 95);
+  --rainflow-surface-inset: oklch(0.998 0.001 95);
+  --rainflow-divider: color-mix(in oklab, var(--foreground) 7.5%, transparent);
+}
+
+/* SnowAPI 4 Independent Tuning Axes */
+[data-theme-font='sans']  { --font-body: var(--font-sans); }
+[data-theme-font='serif'] {
+  --font-body: var(--font-serif);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'tnum' 1;
+}
+
+[data-theme-radius='none'] { --radius: 0rem; }
+[data-theme-radius='sm']   { --radius: 0.3rem; }
+[data-theme-radius='md']   { --radius: 0.5rem; }
+[data-theme-radius='lg']   { --radius: 0.75rem; }
+[data-theme-radius='xl']   { --radius: 1rem; }
+
+[data-theme-scale='sm'] {
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.1875rem;
+}
+[data-theme-scale='lg'] {
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.3125rem;
+}

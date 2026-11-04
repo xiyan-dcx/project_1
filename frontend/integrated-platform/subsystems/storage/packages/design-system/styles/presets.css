@@ -1,0 +1,299 @@
+/* ============================================================================
+ * SnowAPI 换肤层 —— 配色预设 + 四条独立调节轴
+ *
+ * 用法：属性写在 <body> 上，可自由组合
+ *   <body data-theme-preset="rose-garden"
+ *         data-theme-font="serif"
+ *         data-theme-radius="lg"
+ *         data-theme-scale="sm"
+ *         data-theme-content-layout="centered" />
+ *   暗色仍由 <html class="dark"> 控制，与预设正交。
+ *
+ * 顺序要求（本文件内部已排好，整体 @import 在 tokens.css 之后）：
+ *   预设块 → 表面桥接 → 字体轴 → 圆角轴 → 密度轴
+ *   轴写在预设之后，用户的显式选择才能覆盖预设自带的默认值。
+ *
+ * SnowAPI 的出厂默认：preset=default, font=sans, radius=md, scale=sm,
+ * content-layout=centered —— 紧凑、无彩、居中。
+ * ==========================================================================*/
+
+/* ── Ocean Breeze（蓝，锐利：radius 0.3rem）───────────────────────────── */
+[data-theme-preset='ocean-breeze'] {
+  --primary: oklch(0.5461 0.2152 262.88);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.5854 0.2041 277.12);
+  --secondary-foreground: oklch(1 0 0);
+  --ring: oklch(0.5461 0.2152 262.88);
+  --chart-1: oklch(0.5461 0.2152 262.88);
+  --chart-2: oklch(0.5854 0.2041 277.12);
+  --chart-3: oklch(0.809 0.0922 251.81);
+  --chart-4: oklch(0.785 0.1007 274.72);
+  --chart-5: oklch(0.932 0.0281 255.58);
+  --sidebar-primary: oklch(0.5461 0.2152 262.88);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.5461 0.2152 262.88);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-ring: oklch(0.5461 0.2152 262.88);
+  --radius: 0.3rem;
+}
+.dark [data-theme-preset='ocean-breeze'] {
+  --primary: oklch(0.623 0.188 259.81);
+  --ring: oklch(0.623 0.188 259.81);
+  --chart-1: oklch(0.623 0.188 259.81);
+  --sidebar-primary: oklch(0.623 0.188 259.81);
+  --sidebar-accent: oklch(0.623 0.188 259.81);
+  --sidebar-ring: oklch(0.623 0.188 259.81);
+}
+
+/* ── Rose Garden（玫红，柔和：radius 1rem）───────────────────────────── */
+[data-theme-preset='rose-garden'] {
+  --primary: oklch(0.5827 0.2418 12.23);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.8131 0.1129 5.67);
+  --secondary-foreground: oklch(0.2686 0.0032 34.85);
+  --ring: oklch(0.5827 0.2418 12.23);
+  --chart-1: oklch(0.5827 0.2418 12.23);
+  --chart-2: oklch(0.8938 0.0563 3.77);
+  --chart-3: oklch(0.7135 0.1879 7.69);
+  --chart-4: oklch(0.8131 0.1129 5.67);
+  --chart-5: oklch(0.9429 0.0283 5.52);
+  --sidebar-primary: oklch(0.5827 0.2418 12.23);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.5827 0.2418 12.23);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-ring: oklch(0.5827 0.2418 12.23);
+  --radius: 1rem;
+}
+.dark [data-theme-preset='rose-garden'] {
+  --primary: oklch(0.6476 0.2348 10.36);
+  --secondary-foreground: oklch(0.9227 0.0029 34.49);
+  --ring: oklch(0.6476 0.2348 10.36);
+  --chart-1: oklch(0.6476 0.2348 10.36);
+  --sidebar-primary: oklch(0.6476 0.2348 10.36);
+  --sidebar-accent: oklch(0.6476 0.2348 10.36);
+  --sidebar-ring: oklch(0.6476 0.2348 10.36);
+}
+
+/* ── Forest Whisper（青绿，克制：radius 0.5rem）──────────────────────── */
+[data-theme-preset='forest-whisper'] {
+  --primary: oklch(0.5276 0.1072 182.22);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.5236 0.0505 250.18);
+  --secondary-foreground: oklch(1 0 0);
+  --ring: oklch(0.5276 0.1072 182.22);
+  --chart-1: oklch(0.5276 0.1072 182.22);
+  --chart-2: oklch(0.5236 0.0505 250.18);
+  --chart-3: oklch(0.7741 0.1676 178.16);
+  --chart-4: oklch(0.7294 0.0416 244.67);
+  --chart-5: oklch(0.9511 0.0547 177.24);
+  --sidebar-primary: oklch(0.5276 0.1072 182.22);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.5276 0.1072 182.22);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-ring: oklch(0.5276 0.1072 182.22);
+  --radius: 0.5rem;
+}
+.dark [data-theme-preset='forest-whisper'] {
+  --primary: oklch(0.5991 0.1318 180.39);
+  --secondary: oklch(0.6578 0.0485 247.35);
+  --ring: oklch(0.5991 0.1318 180.39);
+  --chart-1: oklch(0.5991 0.1318 180.39);
+  --chart-2: oklch(0.6578 0.0485 247.35);
+  --sidebar-primary: oklch(0.5991 0.1318 180.39);
+  --sidebar-accent: oklch(0.5991 0.1318 180.39);
+  --sidebar-ring: oklch(0.5991 0.1318 180.39);
+}
+
+/* ── Lavender Dream（紫，柔和：radius 1rem）──────────────────────────── */
+[data-theme-preset='lavender-dream'] {
+  --primary: oklch(0.5709 0.1808 306.89);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.811 0.0589 201.14);
+  --secondary-foreground: oklch(0 0 0);
+  --ring: oklch(0.5709 0.1808 306.89);
+  --chart-1: oklch(0.5709 0.1808 306.89);
+  --chart-2: oklch(0.811 0.0589 201.14);
+  --chart-3: oklch(0.8281 0.078 309.73);
+  --chart-4: oklch(0.8611 0.0504 198.03);
+  --chart-5: oklch(0.947 0.0212 309.77);
+  --sidebar-primary: oklch(0.5709 0.1808 306.89);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.5709 0.1808 306.89);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-ring: oklch(0.5709 0.1808 306.89);
+  --radius: 1rem;
+}
+.dark [data-theme-preset='lavender-dream'] {
+  --primary: oklch(0.6359 0.1699 307.95);
+  --ring: oklch(0.6359 0.1699 307.95);
+  --chart-1: oklch(0.6359 0.1699 307.95);
+  --sidebar-primary: oklch(0.6359 0.1699 307.95);
+  --sidebar-accent: oklch(0.6359 0.1699 307.95);
+  --sidebar-ring: oklch(0.6359 0.1699 307.95);
+}
+
+/* 同一套写法还可继续扩展：underground(墨绿+品红 0.5rem)、
+ * lake-view(薄荷 0.75rem)、sunset-glow(砖红 1rem)。
+ * 新增预设只需给出 --primary / --secondary / --ring / --chart-1..5 /
+ * --sidebar-* 与一个 --radius，其余表面由下面的桥接自动派生。 */
+
+/* ── 语义表面桥接 ──────────────────────────────────────────────────────
+ * 换肤不能只染主按钮。这一段把整张表面表从 --primary 推出来，
+ * 于是"新增一个预设"只需要声明一个主色。
+ *
+ * 注意特异性：:not() 会计入其参数的特异性，本选择器为 (0,3,0)。
+ * 需要自定义表面的预设（如暖色系品牌）必须在这里显式 opt-out，
+ * 否则它自己的表面声明会被这段覆盖。 */
+[data-theme-preset]:not([data-theme-preset='default']):not(
+  [data-theme-preset='simple-large']
+) {
+  --card: color-mix(in oklch, var(--primary) 3%, var(--background));
+  --popover: color-mix(in oklch, var(--primary) 5%, var(--background));
+  --muted: color-mix(in oklch, var(--primary) 7%, var(--background));
+  --muted-foreground: color-mix(in oklch, var(--foreground) 68%, var(--primary));
+  --accent: color-mix(in oklch, var(--primary) 14%, var(--background));
+  --accent-foreground: var(--foreground);
+  --border: color-mix(in oklch, var(--primary) 20%, var(--background));
+  --input: color-mix(in oklch, var(--primary) 22%, var(--background));
+  --sidebar: color-mix(in oklch, var(--primary) 4%, var(--background));
+  --sidebar-accent: color-mix(in oklch, var(--primary) 14%, var(--background));
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: color-mix(in oklch, var(--primary) 18%, var(--background));
+  /* 语义色跟随预设色板，避免主色换了而状态色仍是默认蓝绿 */
+  --success: var(--chart-2);
+  --warning: var(--chart-4);
+  --info: var(--chart-1);
+  --neutral: var(--muted-foreground);
+}
+.dark
+  [data-theme-preset]:not([data-theme-preset='default']):not(
+    [data-theme-preset='simple-large']
+  ) {
+  --card: color-mix(in oklch, var(--primary) 8%, var(--background));
+  --popover: color-mix(in oklch, var(--primary) 12%, var(--background));
+  --muted: color-mix(in oklch, var(--primary) 12%, var(--background));
+  --muted-foreground: color-mix(in oklch, var(--foreground) 74%, var(--primary));
+  --accent: color-mix(in oklch, var(--primary) 18%, var(--background));
+  --border: color-mix(in oklch, var(--primary) 24%, var(--background));
+  --input: color-mix(in oklch, var(--primary) 28%, var(--background));
+  --sidebar: color-mix(in oklch, var(--primary) 5%, var(--background));
+  --sidebar-accent: color-mix(in oklch, var(--primary) 18%, var(--background));
+  --sidebar-border: color-mix(in oklch, var(--primary) 22%, var(--background));
+}
+
+/* ── 高对比大字预设（无障碍档，opt-out 出上面的桥接）─────────────────── */
+[data-theme-preset='simple-large'] {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --primary: oklch(0.22 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.93 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.36 0 0);
+  --accent: oklch(0.91 0 0);
+  --border: oklch(0.82 0 0); /* 边框明显加重 */
+  --input: oklch(0.82 0 0);
+  --ring: oklch(0.22 0 0);
+  --radius: 0.5rem;
+  /* 字号整体上抬一档 */
+  --text-xs: 0.9rem;
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.45rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.15rem;
+  --spacing: 0.3rem;
+}
+
+/* ── 字体轴 ───────────────────────────────────────────────────────────
+ * 预设可声明 --font-body 作为默认；用户显式选择写在后面因而胜出。
+ * Provider 负责把 font:'default' 先解析成具体值再写 DOM，
+ * 所以 CSS 只需要最朴素的属性选择器，无需 :not() 或逐预设分支。 */
+[data-theme-font='sans'] {
+  --font-body: var(--font-sans);
+}
+[data-theme-font='serif'] {
+  --font-body: var(--font-serif);
+}
+
+/* 衬线模式的三项排版微调（对任何预设生效，不只是某一款）：
+ * 1) 编辑级 OpenType：连字 + 等宽数字（数字列在比例衬线下仍要对齐）
+ * 2) 整站继承：Tailwind preflight 的 `button,input{font:inherit}` 会把
+ *    衬线带到所有控件；不要维护逐组件的例外清单——等宽上下文
+ *    (<code>/<pre>/.font-mono) 由 preflight 与工具类自动豁免。
+ * 3) 标题降字重 + 收字距 */
+[data-theme-font='serif'] {
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1,
+    'tnum' 1;
+}
+[data-theme-font='serif'] :is(h1, h2, h3, h4, h5, h6),
+[data-theme-font='serif'] [data-slot='dialog-title'],
+[data-theme-font='serif'] [data-slot='sheet-title'],
+[data-theme-font='serif'] [data-slot='drawer-title'],
+[data-theme-font='serif'] [data-slot='card-title'] {
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+/* 大字号（≈30px 以上）再收紧一档 */
+[data-theme-font='serif'] h1,
+[data-theme-font='serif'] .text-3xl,
+[data-theme-font='serif'] .text-4xl,
+[data-theme-font='serif'] .text-5xl {
+  letter-spacing: -0.02em;
+}
+
+/* ── 圆角轴（覆盖预设自带的 --radius）────────────────────────────────── */
+[data-theme-radius='none'] { --radius: 0rem; }
+[data-theme-radius='sm']   { --radius: 0.3rem; }
+[data-theme-radius='md']   { --radius: 0.5rem; }
+[data-theme-radius='lg']   { --radius: 0.75rem; }
+[data-theme-radius='xl']   { --radius: 1rem; }
+
+/* ── 密度轴：同时缩放字号与 Tailwind 间距基数 ────────────────────────
+ * 界面太挤/太松先调这里，不要逐个组件改 padding。
+ * 不设属性时沿用 Tailwind 默认。 */
+[data-theme-scale='sm'] {
+  --text-xs: 0.7rem;
+  --text-sm: 0.78rem;
+  --text-base: 0.88rem;
+  --text-lg: 1rem;
+  --text-xl: 1.13rem;
+  --text-2xl: 1.38rem;
+  --text-3xl: 1.7rem;
+  --spacing: 0.225rem;
+}
+[data-theme-scale='lg'] {
+  --text-xs: 0.84rem;
+  --text-sm: 0.95rem;
+  --text-base: 1.075rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.65rem;
+  --text-3xl: 2rem;
+  --spacing: 0.28rem;
+}
+[data-theme-scale='xl'] {
+  --text-xs: 0.9rem;
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.45rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.15rem;
+  --spacing: 0.3rem;
+}
+
+/* ── 内容宽度轴 ───────────────────────────────────────────────────────
+ * centered 在大屏上把内容夹到舒适阅读宽度；只在超过该宽度时才介入。 */
+@media (min-width: 1280px) {
+  [data-theme-content-layout='centered'] [data-slot='sidebar-inset'] > * {
+    max-width: var(--max-content-width, 1280px);
+    margin-inline: auto;
+    width: 100%;
+  }
+}

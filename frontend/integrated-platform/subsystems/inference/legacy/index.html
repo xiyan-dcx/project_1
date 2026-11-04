@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>视频理解协作系统</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ──────────────────────────────────────────────── */
+    :root {
+      --bg:         #ffffff;
+      --fg:         #1a1a1a;
+      --card:       #ffffff;
+      --border:     #e9e9e9;
+      --primary:    #1a1a1a;
+      --primary-fg: #fafafa;
+      --muted:      #f7f7f7;
+      --muted-fg:   #737373;
+      --ring:       rgba(0,0,0,.1);
+      --radius:     0.625rem;
+      --shadow:     0 1px 2px rgba(0,0,0,.05), 0 0 0 1px rgba(0,0,0,.04);
+      --font-mono:  'JetBrains Mono', 'Courier New', monospace;
+      --content-w:  600px;
+      --header-h:   52px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    .app-header {
+      position: sticky; top: 0; z-index: 10;
+      height: var(--header-h);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center;
+      padding: 0 24px;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--primary); border-radius: 6px;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .logo-mark svg { width: 14px; height: 14px; stroke: var(--primary-fg); fill: none; stroke-width: 2; }
+    .hd-title { font-size: 14px; font-weight: 600; }
+    .hd-sub   { font-size: 11px; color: var(--muted-fg); margin-top: 1px; }
+
+    /* ── Content wrapper — centered single column ────────────── */
+    .content {
+      width: 100%;
+      max-width: var(--content-w);
+      margin: 0 auto;
+      padding: 28px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Card ────────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-body   { padding: 16px 18px; }
+    .card-footer { padding: 0 18px 16px; }
+    .card-sep    { height: 1px; background: var(--border); margin: 14px 0; }
+
+    /* ── Form elements ───────────────────────────────────────── */
+    .field       { display: flex; flex-direction: column; gap: 5px; }
+    .field + .field { margin-top: 13px; }
+    .field-label { font-size: 12px; font-weight: 500; }
+
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      background: transparent; color: var(--fg);
+      font-family: inherit; font-size: 13px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      padding: 9px 11px; resize: none; line-height: 1.65; height: 88px;
+    }
+    textarea:focus {
+      border-color: #a0a0a0;
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    /* ── Custom multi-select dropdown ────────────────────────── */
+    .vd-wrap    { position: relative; }
+    .vd-trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 34px; padding: 0 10px 0 11px;
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 13px; cursor: pointer; user-select: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .vd-trigger:focus       { outline: none; }
+    .vd-trigger.open,
+    .vd-trigger:focus-visible {
+      border-color: #a0a0a0;
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .vd-trigger-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .vd-chevron {
+      width: 13px; height: 13px; flex-shrink: 0; margin-left: 6px;
+      stroke: var(--muted-fg); fill: none; stroke-width: 2;
+      transition: transform .18s;
+    }
+    .vd-trigger.open .vd-chevron { transform: rotate(180deg); }
+
+    .vd-panel {
+      display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      z-index: 100; background: var(--card);
+      border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.06);
+      max-height: 220px; overflow-y: auto;
+      padding: 4px 0;
+    }
+    .vd-panel.open { display: block; animation: slide-in .14s ease; }
+
+    .vd-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 12px; cursor: pointer; font-size: 12px;
+      font-family: var(--font-mono);
+      transition: background .1s;
+    }
+    .vd-item:hover { background: var(--muted); }
+    .vd-item input[type=checkbox] {
+      width: 14px; height: 14px; flex-shrink: 0;
+      accent-color: var(--primary); cursor: pointer;
+    }
+    .vd-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* pills row under the trigger */
+    .vd-pills {
+      display: none; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+    }
+    .vd-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: 99px; padding: 2px 4px 2px 9px;
+      font-size: 11px; font-family: var(--font-mono);
+      max-width: 200px;
+    }
+    .vd-pill span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .vd-pill-rm {
+      display: grid; place-items: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      font-size: 12px; line-height: 1; cursor: pointer;
+      color: var(--muted-fg); flex-shrink: 0;
+      transition: background .1s, color .1s;
+    }
+    .vd-pill-rm:hover { background: var(--border); color: var(--fg); }
+
+    .or-div {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted-fg); font-size: 11px;
+      text-transform: uppercase; letter-spacing: .06em;
+      margin: 2px 0;
+    }
+    .or-div::before, .or-div::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 5px; height: 34px; padding: 0 14px;
+      border-radius: calc(var(--radius) - 2px);
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: 1px solid transparent;
+      transition: background .12s, opacity .12s;
+    }
+    .btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); width: 100%; }
+    .btn-primary:hover    { background: #333; }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ── Section label ───────────────────────────────────────── */
+    .sec-label {
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted-fg);
+    }
+
+    /* ── Pipeline ────────────────────────────────────────────── */
+    .pipe-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .pipe-count {
+      font-size: 10px; font-family: var(--font-mono); color: var(--muted-fg);
+      padding: 1px 7px; background: var(--muted);
+      border: 1px solid var(--border); border-radius: 99px;
+    }
+    .cur-file {
+      font-size: 11px; font-family: var(--font-mono); font-weight: 500;
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 5px 9px; margin-bottom: 14px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* Three stages */
+    .pipeline { display: flex; align-items: flex-start; margin-bottom: 10px; }
+
+    .step {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; text-align: center; gap: 5px;
+    }
+    .ind {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: grid; place-items: center;
+      background: var(--bg);
+      transition: border-color .2s, background .2s;
+      flex-shrink: 0;
+    }
+    .ind.active {
+      border-color: #c8c8c8; border-top-color: var(--primary);
+      animation: spin .72s linear infinite; background: transparent;
+    }
+    .ind.done { background: var(--primary); border-color: var(--primary); }
+    .ind.done svg {
+      width: 11px; height: 11px;
+      stroke: var(--primary-fg); fill: none; stroke-width: 2.5;
+      animation: pop-in .2s cubic-bezier(.175,.885,.32,1.275);
+    }
+
+    .step-name   { font-size: 11px; font-weight: 600; }
+    .step-status { font-size: 10px; color: var(--muted-fg); min-height: 26px; line-height: 1.4; padding: 0 2px; }
+    .step.active .step-status { color: var(--fg); }
+
+    .step-lat {
+      font-family: var(--font-mono); font-size: 10px;
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: 99px; padding: 1px 7px; color: var(--muted-fg);
+      opacity: 0; transform: translateY(2px);
+      transition: opacity .2s, transform .2s;
+    }
+    .step.done .step-lat { opacity: 1; transform: translateY(0); }
+
+    .conn { flex-shrink: 0; width: 28px; height: 24px; display: flex; align-items: center; }
+    .conn-track {
+      width: 100%; height: 1.5px; background: var(--border);
+      border-radius: 2px; overflow: hidden; position: relative;
+    }
+    .conn-fill {
+      position: absolute; inset: 0; right: 100%;
+      background: var(--primary); transition: right .4s ease;
+    }
+    .conn.filled .conn-fill { right: 0; }
+
+    /* Log */
+    .proc-log {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 7px 10px; min-height: 32px;
+      font-size: 10px; font-family: var(--font-mono); color: var(--muted-fg);
+    }
+    .log-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted-fg); flex-shrink: 0; }
+
+    /* Text-mode loading */
+    .text-loading {
+      display: flex; align-items: center; gap: 8px; padding: 4px 0;
+    }
+    .text-spin {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 1.5px solid var(--border); border-top-color: var(--primary);
+      animation: spin .72s linear infinite; flex-shrink: 0;
+    }
+    .text-loading span { font-size: 12px; color: var(--muted-fg); }
+
+    /* ── Results section ─────────────────────────────────────── */
+    .results-hd {
+      display: none;
+      align-items: center; justify-content: space-between;
+    }
+    .results-count { font-size: 10px; font-family: var(--font-mono); color: var(--muted-fg); }
+
+    .res-card {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--card); box-shadow: var(--shadow); overflow: hidden;
+      animation: slide-in .22s ease;
+    }
+    .res-card-hd {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 13px;
+      border-bottom: 1px solid var(--border);
+      background: var(--muted);
+    }
+    .res-fname {
+      font-size: 11px; font-family: var(--font-mono); font-weight: 500;
+      flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .res-total { font-size: 10px; font-family: var(--font-mono); color: var(--muted-fg); flex-shrink: 0; }
+
+    .src-pill {
+      font-size: 10px; font-weight: 600; padding: 2px 7px;
+      border-radius: 99px; border: 1px solid; flex-shrink: 0;
+    }
+    .src-edge     { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
+    .src-cloud    { color: #1e3a5f; background: #eff6ff; border-color: #bfdbfe; }
+    .src-fallback { color: #78350f; background: #fffbeb; border-color: #fde68a; }
+
+    .res-card-body { padding: 13px 14px; }
+    .res-answer    { font-size: 14px; line-height: 1.8; }
+
+    .res-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: 99px; padding: 1px 7px;
+      font-size: 10px; color: var(--muted-fg);
+    }
+    .chip b { font-family: var(--font-mono); color: var(--fg); font-weight: 500; }
+    .rpath-note { margin-top: 6px; font-size: 10px; font-family: var(--font-mono); color: var(--muted-fg); }
+
+    /* ── Animations ──────────────────────────────────────────── */
+    @keyframes spin    { to { transform: rotate(360deg); } }
+    @keyframes pop-in  { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="app-header">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+  </div>
+  <div>
+    <div class="hd-title">视频理解协作系统</div>
+    <div class="hd-sub">云边协同 · 多模态推理</div>
+  </div>
+</header>
+
+<!-- ── Main content ─────────────────────────────────────────── -->
+<div class="content">
+
+  <!-- Input card -->
+  <div class="card">
+    <div class="card-body">
+
+      <div class="field">
+        <label class="field-label">视频</label>
+        <div class="vd-wrap" id="vd-wrap">
+          <div class="vd-trigger" id="vd-trigger" tabindex="0"
+               onclick="toggleVidDrop(event)" onkeydown="if(event.key==='Enter'||event.key===' ')toggleVidDrop(event)">
+            <span class="vd-trigger-label" id="vd-label">— 不附带视频（纯文本模式）—</span>
+            <svg class="vd-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="vd-panel" id="vd-panel"></div>
+        </div>
+        <div class="vd-pills" id="vd-pills"></div>
+      </div>
+
+      <div class="or-div">或</div>
+
+      <div class="field">
+        <label class="field-label" for="inp-prompt">问题</label>
+        <textarea id="inp-prompt" placeholder="请输入你想了解的内容…"></textarea>
+      </div>
+
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" id="btn-submit" onclick="handleSubmit()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        发送
+      </button>
+    </div>
+  </div>
+
+  <!-- Pipeline card — appears after first submit, stays -->
+  <div class="card" id="pipeline-card" style="display:none">
+    <div class="card-body">
+
+      <div class="pipe-hd">
+        <span class="sec-label" id="pipe-label">推理流水线</span>
+        <span class="pipe-count" id="pipe-count" style="visibility:hidden">—</span>
+      </div>
+
+      <div class="cur-file" id="cur-file">—</div>
+
+      <!-- Stages (video mode) -->
+      <div id="stage-block">
+        <div class="pipeline">
+
+          <div class="step" id="step-extract">
+            <div class="ind" id="ind-extract"></div>
+            <div class="step-name">抽帧</div>
+            <div class="step-status" id="ss-extract">等待中</div>
+            <div class="step-lat"    id="sl-extract">—</div>
+          </div>
+
+          <div class="conn" id="conn-1">
+            <div class="conn-track"><div class="conn-fill"></div></div>
+          </div>
+
+          <div class="step" id="step-assess">
+            <div class="ind" id="ind-assess"></div>
+            <div class="step-name">任务评估</div>
+            <div class="step-status" id="ss-assess">等待中</div>
+            <div class="step-lat"    id="sl-assess">—</div>
+          </div>
+
+          <div class="conn" id="conn-2">
+            <div class="conn-track"><div class="conn-fill"></div></div>
+          </div>
+
+          <div class="step" id="step-route">
+            <div class="ind" id="ind-route"></div>
+            <div class="step-name">网络路由</div>
+            <div class="step-status" id="ss-route">等待中</div>
+            <div class="step-lat"    id="sl-route">—</div>
+          </div>
+
+        </div>
+
+        <div class="proc-log" id="proc-log">
+          <div class="log-dot"></div>
+          <span id="log-text">等待中…</span>
+        </div>
+      </div>
+
+      <!-- Text-mode spinner -->
+      <div id="text-block" style="display:none">
+        <div class="text-loading">
+          <div class="text-spin"></div>
+          <span>思考中…</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Results header -->
+  <div class="results-hd" id="results-hd">
+    <span class="sec-label">推理结果</span>
+    <span class="results-count" id="res-count">0 条</span>
+  </div>
+
+  <!-- Result cards appended here -->
+  <div id="results-list"></div>
+
+</div><!-- .content -->
+
+<script>
+/* ── Constants ────────────────────────────────────────────── */
+const RPATH_LABEL = {
+  stay_edge_verified:        '边缘验收通过',
+  local_resample_then_edge:  '补看后保留边缘',
+  local_resample_then_cloud: '补看后升级云端',
+  direct_cloud:              '直接云端复核',
+  edge_failed_cloud:         '边缘失败 · 云端接管',
+  cloud_failed:              '云端失败 · 边缘降级',
+};
+const ACTION_LABEL = { stay_edge: '保留边缘', local_resample: 'hybrid策略分析', send_cloud: '升级云端' };
+const STAGE_TEXT = {
+  extract: { active: '正在解码视频帧…', done: ev => `${ev.frames} 帧 · 难度 ${ev.difficulty}` },
+  assess:  { active: '双采样边缘推理…', done: ev => `${ACTION_LABEL[ev.action] || ev.action} · 综合分 ${ev.score}` },
+  route:   { active: '执行路由决策…',   done: ev => RPATH_LABEL[ev.path] || ev.path },
+};
+
+let resultCount = 0;
+
+/* ── Boot ─────────────────────────────────────────────────── */
+addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { videos } = await (await fetch('/videos')).json();
+    const panel = document.getElementById('vd-panel');
+    for (const v of videos) {
+      const lbl = document.createElement('label');
+      lbl.className = 'vd-item';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = v;
+      cb.addEventListener('change', syncVidUI);
+      const sp = document.createElement('span');
+      sp.textContent = v;
+      lbl.append(cb, sp);
+      panel.appendChild(lbl);
+    }
+  } catch {}
+  document.addEventListener('click', e => {
+    if (!document.getElementById('vd-wrap').contains(e.target)) closeVidDrop();
+  });
+});
+
+/* ── Custom dropdown helpers ──────────────────────────────── */
+function toggleVidDrop(e) {
+  e.stopPropagation();
+  const panel   = document.getElementById('vd-panel');
+  const trigger = document.getElementById('vd-trigger');
+  const isOpen  = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  trigger.classList.toggle('open', !isOpen);
+}
+function closeVidDrop() {
+  document.getElementById('vd-panel').classList.remove('open');
+  document.getElementById('vd-trigger').classList.remove('open');
+}
+function getSelectedVideos() {
+  return [...document.querySelectorAll('#vd-panel input[type=checkbox]:checked')].map(c => c.value);
+}
+function removeVid(v) {
+  const cb = document.querySelector(`#vd-panel input[value="${CSS.escape(v)}"]`);
+  if (cb) { cb.checked = false; syncVidUI(); }
+}
+function syncVidUI() {
+  const sel   = getSelectedVideos();
+  const label = document.getElementById('vd-label');
+  const pills = document.getElementById('vd-pills');
+  if (sel.length === 0) {
+    label.textContent   = '— 不附带视频（纯文本模式）—';
+    pills.style.display = 'none';
+    pills.innerHTML     = '';
+  } else {
+    label.textContent   = `已选 ${sel.length} 个视频`;
+    pills.style.display = 'flex';
+    pills.innerHTML = sel.map(v => `
+      <div class="vd-pill">
+        <span>${v}</span>
+        <span class="vd-pill-rm" onclick="removeVid('${v.replace(/'/g,"\\'")}')">×</span>
+      </div>`).join('');
+  }
+}
+
+/* ── Submit ───────────────────────────────────────────────── */
+async function handleSubmit() {
+  closeVidDrop();
+  const videos = getSelectedVideos();
+  const prompt = document.getElementById('inp-prompt').value.trim();
+  if (!prompt) { document.getElementById('inp-prompt').focus(); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+
+  document.getElementById('pipeline-card').style.display = 'block';
+  document.getElementById('results-hd').style.display    = 'flex';
+
+  if (videos.length === 0) {
+    await runText(prompt);
+  } else {
+    for (let i = 0; i < videos.length; i++) {
+      await runVideo(videos[i], prompt, i + 1, videos.length);
+    }
+  }
+
+  btn.disabled = false;
+}
+
+/* ── Text mode ────────────────────────────────────────────── */
+async function runText(prompt) {
+  document.getElementById('pipe-label').textContent      = '文本对话';
+  document.getElementById('pipe-count').style.visibility = 'hidden';
+  document.getElementById('cur-file').textContent        = '—';
+  show('text-block'); hide('stage-block');
+
+  try {
+    const r = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
+    const d = await r.json();
+    hide('text-block');
+    pushResult(null, d.ok ? d.answer : `失败：${d.error}`, 'Cloud (P3-02)', null, null);
+  } catch (e) {
+    hide('text-block');
+    pushResult(null, `网络错误：${e}`, 'Error', null, null);
+  }
+}
+
+/* ── Video mode ───────────────────────────────────────────── */
+async function runVideo(video, prompt, idx = 1, total = 1) {
+  document.getElementById('pipe-label').textContent      = '推理流水线';
+  document.getElementById('pipe-count').style.visibility = 'visible';
+  document.getElementById('pipe-count').textContent      = total > 1 ? `${idx} / ${total}` : video;
+  document.getElementById('cur-file').textContent        = video;
+  show('stage-block'); hide('text-block');
+  resetStages();
+
+  try {
+    const resp = await fetch('/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ video, prompt }),
+    });
+    const reader  = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    outer: while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const parts = buf.split('\n\n');
+      buf = parts.pop() ?? '';
+      for (const part of parts) {
+        if (!part.startsWith('data: ')) continue;
+        try {
+          const ev = JSON.parse(part.slice(6));
+          if (ev.type === 'result') {
+            await sleep(320);
+            pushResult(video, ev.answer, ev.source, ev.route_path, ev.latencies);
+            break outer;
+          }
+          handleSSE(ev);
+        } catch {}
+      }
+    }
+  } catch (e) {
+    pushResult(video, `网络错误：${e}`, 'Error', null, null);
+  }
+}
+
+/* ── SSE ──────────────────────────────────────────────────── */
+function handleSSE(ev) {
+  switch (ev.type) {
+    case 'stage_start': activateStage(ev.stage); break;
+    case 'stage_done':  completeStage(ev.stage, ev.latency, ev); break;
+    case 'error':       pushResult(document.getElementById('cur-file').textContent, `错误：${ev.message}`, 'Error', null, null); break;
+  }
+}
+
+/* ── Stage helpers ────────────────────────────────────────── */
+function activateStage(stage) {
+  const ind  = document.getElementById(`ind-${stage}`);
+  ind.className = 'ind active'; ind.innerHTML = '';
+  document.getElementById(`step-${stage}`).className = 'step active';
+  document.getElementById(`ss-${stage}`).textContent = STAGE_TEXT[stage].active;
+  setLog(STAGE_TEXT[stage].active);
+}
+
+function completeStage(stage, latency, ev) {
+  const ind = document.getElementById(`ind-${stage}`);
+  ind.className = 'ind done';
+  ind.innerHTML = `<svg viewBox="0 0 11 11" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>`;
+  document.getElementById(`step-${stage}`).className = 'step done';
+  document.getElementById(`ss-${stage}`).textContent = STAGE_TEXT[stage].done(ev);
+  document.getElementById(`sl-${stage}`).textContent = `${latency}s`;
+  if (stage === 'extract') document.getElementById('conn-1').classList.add('filled');
+  if (stage === 'assess')  document.getElementById('conn-2').classList.add('filled');
+  setLog(`${{ extract:'抽帧', assess:'任务评估', route:'网络路由' }[stage]} 完成 · ${latency}s`);
+}
+
+function resetStages() {
+  for (const s of ['extract', 'assess', 'route']) {
+    const ind = document.getElementById(`ind-${s}`);
+    ind.className = 'ind'; ind.innerHTML = '';
+    document.getElementById(`step-${s}`).className = 'step';
+    document.getElementById(`ss-${s}`).textContent = '等待中';
+    document.getElementById(`sl-${s}`).textContent = '—';
+  }
+  document.getElementById('conn-1').classList.remove('filled');
+  document.getElementById('conn-2').classList.remove('filled');
+  setLog('等待中…');
+}
+
+function setLog(msg) { document.getElementById('log-text').textContent = msg; }
+
+/* ── Push result ──────────────────────────────────────────── */
+function pushResult(video, answer, source, rpath, lats) {
+  resultCount++;
+  document.getElementById('res-count').textContent = `${resultCount} 条`;
+
+  const src = (source || '').toLowerCase();
+  const cls = src.includes('cloud') ? 'src-cloud'
+            : (src.includes('error') || src.includes('fallback')) ? 'src-fallback'
+            : 'src-edge';
+
+  const chipsHtml = lats ? `
+    <div class="res-chips">
+      ${[['抽帧', lats.extract], ['评估', lats.assess], ['路由', lats.route], ['总计', lats.total]]
+        .map(([k, v]) => `<div class="chip">${k}&nbsp;<b>${v ?? '—'}s</b></div>`).join('')}
+    </div>
+    <div class="rpath-note">${rpath ? `路由路径：${rpath} → ${RPATH_LABEL[rpath] || rpath}` : ''}</div>
+  ` : '';
+
+  const card = document.createElement('div');
+  card.className = 'res-card';
+  card.innerHTML = `
+    <div class="res-card-hd">
+      <div class="res-fname">${video || '文本问答'}</div>
+      <div class="src-pill ${cls}">${source}</div>
+      ${lats ? `<div class="res-total">${lats.total}s</div>` : ''}
+    </div>
+    <div class="res-card-body">
+      <div class="res-answer">${answer || '（无输出）'}</div>
+      ${chipsHtml}
+    </div>`;
+
+  document.getElementById('results-list').appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── Utilities ────────────────────────────────────────────── */
+const show  = id => { document.getElementById(id).style.display = ''; };
+const hide  = id => { document.getElementById(id).style.display = 'none'; };
+const sleep = ms  => new Promise(r => setTimeout(r, ms));
+
+addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') handleSubmit();
+});
+</script>
+</body>
+</html>

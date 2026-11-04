@@ -1,0 +1,3 @@
+@media(prefers-reduced-motion:no-preference){.ui-page-content{animation:snowapi-content-reveal var(--duration-medium) var(--ease-out) both}}
+@keyframes snowapi-content-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.ui-page-content{opacity:1!important;transform:none!important}}

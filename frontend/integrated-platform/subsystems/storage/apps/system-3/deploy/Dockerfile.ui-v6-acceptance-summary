@@ -1,0 +1,6 @@
+FROM scalaafa/dashboard-ui:v5-vue-api
+USER root
+RUN rm -rf /app/dist
+COPY apps/system-3/dist/ /app/dist/
+RUN chmod -R a+rX /app/dist
+USER 1017:0
